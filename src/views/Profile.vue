@@ -19,57 +19,100 @@
                             <div class="col-lg-3 order-lg-2">
                                 <div class="card-profile-image">
                                     <a href="#">
-                                        <img v-lazy="'img/theme/team-4-800x800.jpg'" class="rounded-circle">
+                                        <img v-bind:v-lazy="avatar" class="rounded-circle" v-bind:src="avatar">
                                     </a>
                                 </div>
                             </div>
                             <div class="col-lg-4 order-lg-3 text-lg-right align-self-lg-center">
                                 <div class="card-profile-actions py-4 mt-lg-0">
-                                    <base-button type="info" size="sm" class="mr-4">Connect</base-button>
-                                    <base-button type="default" size="sm" class="float-right">Message</base-button>
+                                    <base-button type="info" size="sm" class="mr-4">通知</base-button>
+                                    <base-button type="default" size="sm" class="float-right">联系作者</base-button>
                                 </div>
                             </div>
                             <div class="col-lg-4 order-lg-1">
                                 <div class="card-profile-stats d-flex justify-content-center">
                                     <div>
-                                        <span class="heading">22</span>
-                                        <span class="description">Friends</span>
+                                        <span class="heading">{{ workCount }}</span>
+                                        <span class="description">作品数量</span>
                                     </div>
                                     <div>
-                                        <span class="heading">10</span>
-                                        <span class="description">Photos</span>
+                                        <span class="heading">{{ registerCount }}</span>
+                                        <span class="description">已登记作品数量</span>
                                     </div>
                                     <div>
-                                        <span class="heading">89</span>
-                                        <span class="description">Comments</span>
+                                        <span class="heading">{{ monitorCount }}</span>
+                                        <span class="description">正在监测作品</span>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="text-center mt-5">
-                            <h3>Jessica Jones
-                                <span class="font-weight-light">, 27</span>
+                            <h3>{{ name }}
+                                <span class="font-weight-light">, {{ age }} 岁</span>
                             </h3>
-                            <div class="h6 font-weight-300"><i class="ni location_pin mr-2"></i>Bucharest, Romania</div>
-                            <div class="h6 mt-4"><i class="ni business_briefcase-24 mr-2"></i>Solution Manager - Creative Tim Officer</div>
-                            <div><i class="ni education_hat mr-2"></i>University of Computer Science</div>
+                            <div class="h6 font-weight-300"><i class="ni location_pin mr-2"></i>{{ residence }}</div>
+                            <div class="h6 mt-4"><i class="ni business_briefcase-24 mr-2"></i>{{ jobTitle }}</div>
+                            <div><i class="ni education_hat mr-2"></i>{{ workplace }}</div>
                         </div>
                         <div class="mt-5 py-5 border-top text-center">
                             <div class="row justify-content-center">
                                 <div class="col-lg-9">
-                                    <p>An artist of considerable range, Ryan — the name taken by Melbourne-raised, Brooklyn-based Nick Murphy — writes, performs and records all of his own music, giving it a warm, intimate feel with a solid groove structure. An artist of considerable range.</p>
-                                    <a href="#">Show more</a>
+                                    <p>{{ self_introduction }}</p>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </card>
+                
+                <div class="text-center mt-10">
+                  <tabs>
+                    <tab-pane title="作品集"></tab-pane>
+                    <tab-pane title="登记作品"></tab-pane>
+                    <tab-pane title="监测作品"></tab-pane>
+                  </tabs>
+                </div>
             </div>
         </section>
     </div>
 </template>
+
+
 <script>
-export default {};
+import Tabs from '../components/Tabs/Tabs'
+import TabPane from '../components/Tabs/TabPane'
+export default {
+  components: {
+    Tabs,
+    TabPane
+  },
+  created: function() {
+    this.workCount = 10
+    this.registerCount = 5
+    this.monitorCount = 8
+    this.name = '小明'
+    this.age = 27
+    this.residence = '北京'
+    this.jobTitle = '自由摄影师'
+    this.workplace = 'Hypercool视觉研究院'
+    this.self_introduction = '大家好，我是一名自由摄影师小明，很高兴能认识大家，希望大家能够喜欢我的作品'
+    this.avatar = 'img/theme/team-4-800x800.jpg'
+  },
+
+  data() {
+    return {
+      workCount: 10,
+      registerCount: 5, 
+      monitorCount: 8,
+      name: '小明',
+      age: 27, 
+      residence: '北京',
+      jobTitle: '自由摄影师',
+      workplace: 'Hypercool视觉研究院',
+      self_introduction: '大家好，我是一名自由摄影师小明，很高兴能认识大家，希望大家能够喜欢我的作品',
+      avatar: 'img/theme/team-4-800x800.jpg'
+    }
+  }
+};
 </script>
 <style>
 </style>
