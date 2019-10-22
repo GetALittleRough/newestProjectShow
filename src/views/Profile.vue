@@ -66,9 +66,23 @@
                 
                 <div class="text-center mt-10">
                   <tabs>
-                    <tab-pane title="作品集"></tab-pane>
-                    <tab-pane title="登记作品"></tab-pane>
-                    <tab-pane title="监测作品"></tab-pane>
+                    <tab-pane title="作品集">
+                        <div class="row">
+                            <div class="collections col-6" v-for="(img,index) in images" v-bind:key="index">
+                                <img v-bind:src="img" alt="index" class="collection-image">
+                            </div>
+                        </div>
+                    </tab-pane>
+                    <tab-pane title="登记作品">
+                        <div>
+                            <p>this is fucking amusing2.</p>
+                        </div>
+                    </tab-pane>
+                    <tab-pane title="监测作品">
+                        <div>
+                            <p>this is fucking amusing3.</p>
+                        </div>
+                    </tab-pane>
                   </tabs>
                 </div>
             </div>
@@ -109,10 +123,20 @@ export default {
       jobTitle: '自由摄影师',
       workplace: 'Hypercool视觉研究院',
       self_introduction: '大家好，我是一名自由摄影师小明，很高兴能认识大家，希望大家能够喜欢我的作品',
-      avatar: 'img/theme/team-4-800x800.jpg'
+      avatar: 'img/theme/team-4-800x800.jpg',
+      images: [
+          'img/theme/team-1-800x800.jpg',
+          'img/theme/team-2-800x800.jpg',
+          'img/theme/team-3-800x800.jpg',
+          'img/theme/team-4-800x800.jpg',
+      ]
     }
   }
 };
 </script>
-<style>
+<style scoped lang="scss">
+.collection-image {
+    width: 100%;
+    margin-top: 5vh;
+}
 </style>
