@@ -1,0 +1,74 @@
+<template>
+    <header class="header-global">
+        <base-nav class="navbar-main" transparent type="" effect="light" expand>
+            <router-link slot="brand" class="navbar-brand mr-lg-5" to="/">
+                <img src="img/brand/logo-horizantal2.png" alt="logo">
+            </router-link>
+
+            <ul class="navbar-nav navbar-nav-hover align-items-lg-center">
+                <a slot="title" href="/" class="nav-link" role="button">
+                    <span class="nav-link-inner--text">主页</span>
+                </a>
+                <a href="/landing" class="nav-link" role="button"><li class="nav-item">版权存证</li></a>
+                <a href="/profile" class="nav-link" role="button"><li class="nav-item">登记版权</li></a>
+                <a href="/profile" class="nav-link" role="button"><li class="nav-item">版权监测</li></a>
+                
+            </ul>
+            <ul class="navbar-nav align-items-lg-center ml-lg-auto">
+                <li class="nav-item d-none d-lg-block ml-lg-4" v-if="!loggedin">
+                    <a target="_blank" role="button" v-if="!loggedin"
+                       class="btn btn-neutral btn-icon" @click="toLogin()">
+                <span class="btn-inner--icon">
+                  <i class="fa fa-cloud-download mr-2"></i>
+                </span>
+                        <span class="nav-link-inner--text">登录/注册</span>
+                    </a>
+                </li>
+                <li class="nav-item d-none d-lg-block ml-lg-4" v-if="loggedin">
+                    <button class="btn btn-success" type="button" @click="toProfile()">
+                        {{ username }}
+                    </button>
+                </li>
+            </ul>
+        </base-nav>
+    </header>
+</template>
+<script>
+import BaseNav from "@/components/BaseNav";
+import BaseDropdown from "@/components/BaseDropdown";
+import CloseButton from "@/components/CloseButton";
+
+export default {
+  components: {
+    BaseNav,
+    CloseButton,
+    BaseDropdown
+  },
+  data() {
+      return {
+          username: this.$store.getters.token
+      }
+  },
+  computed: {
+      loggedin: {
+          get() {
+            if (this.$store.getters.token) {
+                return true
+            } else {
+                return false
+            }
+          }
+      }
+  },
+  methods: {
+      toLogin() {
+          this.$router.push({ path: 'login' })
+      },
+      toProfile() {
+          this.$router.push({ path: 'profile'})
+      }
+  }
+};
+</script>
+<style>
+</style>
