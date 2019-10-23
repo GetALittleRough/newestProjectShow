@@ -15,4 +15,12 @@ router.post('/login', function(req, res, next) {
     }
   })
 })
+router.post('/logout', function(req, res, next) {
+  res.send({
+    code: 20000,
+    data: {
+      
+    }
+  })
+})
 module.exports = router;

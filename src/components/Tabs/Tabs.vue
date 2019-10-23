@@ -1,38 +1,41 @@
 <template>
   <component :is="layoutComponent">
     <template slot="nav">
-      <div class="nav-wrapper">
-        <ul class="nav"
-            role="tablist"
-            :class="
-            [type ? `nav-pills-${type}`: '',
-              pills ? 'nav-pills': 'nav-tabs',
-             {'nav-pills-icons': icons},
-             {'nav-fill': fill},
-             {'nav-pills-circle': circle},
-             {'justify-content-center': centered},
-             tabNavClasses
-            ]">
+      <fade-transition origin="center" mode="out-in" :duration="250">
+         <div class="nav-wrapper">
+          <ul class="nav"
+              role="tablist"
+              :class="
+              [type ? `nav-pills-${type}`: '',
+                pills ? 'nav-pills': 'nav-tabs',
+              {'nav-pills-icons': icons},
+              {'nav-fill': fill},
+              {'nav-pills-circle': circle},
+              {'justify-content-center': centered},
+              tabNavClasses
+              ]">
 
-          <li v-for="tab in tabs"
-              class="nav-item"
-              :key="tab.id || tab.title">
+            <li v-for="tab in tabs"
+                class="nav-item"
+                :key="tab.id || tab.title">
 
-            <a data-toggle="tab"
-               role="tab"
-               class="nav-link"
-               :href="`#${tab.id || tab.title}`"
-               @click.prevent="activateTab(tab)"
-               :aria-selected="tab.active"
-               :class="{active: tab.active}">
-              <tab-item-content :tab="tab">
-              </tab-item-content>
-            </a>
+              <a data-toggle="tab"
+                role="tab"
+                class="nav-link"
+                :href="`#${tab.id || tab.title}`"
+                @click.prevent="activateTab(tab)"
+                :aria-selected="tab.active"
+                :class="{active: tab.active}">
+                <tab-item-content :tab="tab">
+                </tab-item-content>
+              </a>
 
-          </li>
+            </li>
 
-        </ul>
-      </div>
+          </ul>
+        </div>
+      </fade-transition>
+     
     </template>
     <div slot="content" class="tab-content"
          :class="[tabContentClasses]">
@@ -44,11 +47,13 @@
 <script>
 import PillsLayout from "./PillsLayout";
 import TabsLayout from "./TabsLayout";
+import { FadeTransition } from "vue2-transitions";
 export default {
   name: "tabs",
   components: {
     TabsLayout,
     PillsLayout,
+    FadeTransition,
     TabItemContent: {
       props: ["tab"],
       render(h) {

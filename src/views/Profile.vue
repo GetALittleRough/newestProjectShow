@@ -25,8 +25,8 @@
                             </div>
                             <div class="col-lg-4 order-lg-3 text-lg-right align-self-lg-center">
                                 <div class="card-profile-actions py-4 mt-lg-0">
-                                    <base-button type="info" size="sm" class="mr-4">通知</base-button>
-                                    <base-button type="default" size="sm" class="float-right">联系作者</base-button>
+                                    <base-button type="info" size="sm" class="mr-4"><i class="ni ni-chat-round"></i> 消息通知 <badge type="default">{{ notification }}</badge></base-button>
+                                    <base-button type="default" size="sm" class="float-right"><i class="ni ni-settings"></i>个人设置 <badge type="white">1</badge></base-button>
                                 </div>
                             </div>
                             <div class="col-lg-4 order-lg-1">
@@ -129,7 +129,8 @@ export default {
           'img/theme/team-2-800x800.jpg',
           'img/theme/team-3-800x800.jpg',
           'img/theme/team-4-800x800.jpg',
-      ]
+      ],
+      notification: 4
     }
   }
 };

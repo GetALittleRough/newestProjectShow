@@ -25,9 +25,19 @@
                     </a>
                 </li>
                 <li class="nav-item d-none d-lg-block ml-lg-4" v-if="loggedin">
-                    <button class="btn btn-success" type="button" @click="toProfile()">
+                    <!-- <button class="btn btn-success" type="button" @click="toProfile()">
                         {{ username }}
-                    </button>
+                    </button> -->
+                     <base-dropdown>
+                        <base-button slot="title" type="success" class="dropdown-toggle">
+                        {{ username }}
+                        </base-button>
+                        <a class="dropdown-item" @click="toProfile()">个人资料</a>
+                        <a class="dropdown-item" @click="logout()">退出登录</a>
+                        <a class="dropdown-item" href="#">Something else here</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#">Separated link</a>
+                    </base-dropdown>
                 </li>
             </ul>
         </base-nav>
@@ -66,6 +76,12 @@ export default {
       },
       toProfile() {
           this.$router.push({ path: 'profile'})
+      },
+      logout() {
+          this.$store.dispatch('user/logout')
+          .then(() => {
+              this.$router.push({path: '/'})
+          })
       }
   }
 };
