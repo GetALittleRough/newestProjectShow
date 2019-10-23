@@ -22,7 +22,9 @@ import './permission';
 import Argon from "./plugins/argon-kit";
 import store from "./store"
 import './registerServiceWorker';
+import BootstrapVue from 'bootstrap-vue';
 
+Vue.use(BootstrapVue);
 Vue.config.productionTip = false;
 Vue.use(Argon);
 new Vue({

@@ -18,7 +18,7 @@
                 </div>
                 <div class="col-md-6">
                     <div class="pl-md-5">
-                        <icon name="ni ni-settings" class="mb-5" size="lg" type="warning" shadow rounded></icon>
+                        <icon name="ni ni-like-2" class="mb-5" size="lg" type="warning" shadow rounded></icon>
 
                         <h3>我们的优势</h3>
                         <p class="lead">原创数据结构，精确表征图片特性，高效图片查询，海量数据检索。</p>
