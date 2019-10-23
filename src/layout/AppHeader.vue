@@ -34,9 +34,6 @@
                         </base-button>
                         <a class="dropdown-item" @click="toProfile()">个人资料</a>
                         <a class="dropdown-item" @click="logout()">退出登录</a>
-                        <a class="dropdown-item" href="#">Something else here</a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="#">Separated link</a>
                     </base-dropdown>
                 </li>
             </ul>

@@ -8,6 +8,9 @@ import Login from "./views/Login.vue";
 import Register from "./views/Register.vue";
 import Profile from "./views/Profile.vue";
 
+import profileHomepage from './views/components/profileHomepage.vue';
+import editProfile from './views/components/editProfile.vue'
+
 Vue.use(Router);
 
 export default new Router({
@@ -52,12 +55,27 @@ export default new Router({
     },
     {
       path: "/profile",
-      name: "profile",
       components: {
         header: AppHeader,
         default: Profile,
         footer: AppFooter
-      }
+      },
+      children: [
+        {
+          path: '',
+          name: "profilehome",
+          components: {
+            default: profileHomepage 
+          }
+        },
+        {
+          path: 'editProfile',
+          name: 'edit',
+          components: {
+            default: editProfile
+          }
+        }
+      ]
     }
   ],
   scrollBehavior: to => {
