@@ -10,6 +10,7 @@ import Profile from "./views/Profile.vue";
 
 import profileHomepage from './views/components/profileHomepage.vue';
 import editProfile from './views/components/editProfile.vue'
+import MessagesComponent from './views/components/Messages.vue'
 
 Vue.use(Router);
 
@@ -73,6 +74,13 @@ export default new Router({
           name: 'edit',
           components: {
             default: editProfile
+          }
+        },
+        {
+          path: 'messages',
+          name: 'message',
+          components: {
+            default: MessagesComponent
           }
         }
       ]

@@ -20,12 +20,10 @@
 
 
 <script>
-import profileHomepage from './components/profileHomepage';
 import { FadeTransition } from "vue2-transitions";
 export default {
     components: {
-        profileHomepage,
-        FadeTransition
+        FadeTransition,
     }
 }
 </script>

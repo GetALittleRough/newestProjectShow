@@ -13,7 +13,7 @@
                       </div>
                       <div class="col-lg-4 order-lg-3 text-lg-right align-self-lg-center">
                           <div class="card-profile-actions py-4 mt-lg-0">
-                              <base-button type="info" size="sm" class="mr-4"><i class="ni ni-chat-round"></i> 消息通知 <badge type="default">{{ notification }}</badge></base-button>
+                              <base-button type="info" size="sm" class="mr-4" @click="toMessages()"><i class="ni ni-chat-round" ></i> 消息通知 <badge type="default">{{ notification }}</badge></base-button>
                               <base-button type="default" size="sm" class="float-right" @click="editProfile()"><i class="ni ni-settings"></i>个人设置 <badge type="white">1</badge></base-button>
                           </div>
                       </div>
@@ -52,12 +52,12 @@
               </div>
           </card>
           
-          <div class="text-center mt-10">
+          <div class="text-center mt-10 justify-content-center">
             <tabs>
               <tab-pane title="作品集">
                 <transition name="fade">
                   <div class="row">
-                      <div class="collections col-6" v-for="(img,index) in images" v-bind:key="index">
+                      <div class="collections col-6" v-for="(img,index) in pages" v-bind:key="index">
                         <img v-bind:src="img" alt="index" class="collection-image">
                       </div>
                   </div>
@@ -74,6 +74,35 @@
                   </div>
               </tab-pane>
             </tabs>
+            <!-- <nav aria-label="Page navigation" class="pagination-nav">
+              <ul class="pagination justify-content-center">
+                <li class="page-item disabled">
+                  <a class="page-link" href="#" tabindex="-1">
+                    <i class="fa fa-angle-left"></i>
+                    <span class="sr-only">Previous</span>
+                  </a>
+                </li>
+                <li class="page-item"><a class="page-link" href="#">1</a></li>
+                <li class="page-item active">
+                  <a class="page-link" href="#">2 <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                <li class="page-item">
+                  <a class="page-link" href="#">
+                    <i class="fa fa-angle-right"></i>
+                    <span class="sr-only">Next</span>
+                  </a>
+                </li>
+              </ul>
+            </nav> -->
+            <base-pagination class="pagination-nav"
+              :perPage="perPage"
+              :total="images.length"
+              :align="'center'"
+              :value="currentPage"
+              @input="changePage2"
+              >
+            </base-pagination>
           </div>
       </div>
   </section>
@@ -82,6 +111,7 @@
 import Tabs from '../../components/Tabs/Tabs'
 import TabPane from '../../components/Tabs/TabPane'
 import { FadeTransition } from "vue2-transitions";
+import { BasePagination } from '../../components/BasePagination';
 export default {
   components: {
     Tabs,
@@ -99,6 +129,7 @@ export default {
     this.workplace = 'Hypercool视觉研究院'
     this.self_introduction = '大家好，我是一名自由摄影师小明，很高兴能认识大家，希望大家能够喜欢我的作品'
     this.avatar = 'img/theme/team-4-800x800.jpg'
+    this.right = this.images.length > this.perPage? this.perPage: this.images.length;
   },
 
   data() {
@@ -118,20 +149,50 @@ export default {
           'img/theme/team-2-800x800.jpg',
           'img/theme/team-3-800x800.jpg',
           'img/theme/team-4-800x800.jpg',
+          'img/theme/img-1-1200x1000.jpg',
+          'img/theme/img-2-1200x1000.jpg',
+          'img/theme/team-1-800x800.jpg',
+          'img/theme/team-2-800x800.jpg',
+          'img/theme/team-3-800x800.jpg',
+          'img/theme/team-4-800x800.jpg',
+          'img/theme/img-1-1200x1000.jpg',
+          'img/theme/img-2-1200x1000.jpg',
+          'img/theme/img-2-1200x1000.jpg',
       ],
-      notification: 4
+      notification: 4,
+      perPage: 4,
+      left: 0,
+      right: 0,
+      currentPage: 1
     }
   },
   methods: {
     editProfile: function() {
       this.$router.push({path: '/profile/editprofile'})
+    },
+    toMessages: function() {
+      this.$router.push({path: '/profile/messages'})
+    },
+    changePage2: function(value) {
+      this.left = (value - 1) * this.perPage;
+      this.right = value * this.perPage > this.images.length? this.images.length : value * this.perPage;
+      this.currentPage = value
+      // this.pages = this.images.slice(left, right)
+    }
+  },
+  computed: {
+    pages() {
+      return this.images.slice(this.left, this.right)
     }
   }
-};
+}
 </script>
 <style scoped lang="scss">
 .collection-image {
     width: 100%;
     margin-top: 5vh;
+}
+.pagination-nav {
+  margin-top: 5vh;
 }
 </style>
