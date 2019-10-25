@@ -1,42 +1,37 @@
 <template>
   <section class="container message">
-    <div class="row message-wrapper">
-      <div class="col-md-4 image-wrapper">
-        <img src="/img/theme/team-1-800x800.jpg" alt="" class="message-image rounded-circle">
-      </div>
-      <div class="col-md-8">
-        <h4 class="message-title">Hypercool团队邀请您加入！</h4>
-        <p class="message-content">点击现在就加入我们Hypercool团队！</p>
-      </div>
-    </div>
-    <div class="row message-wrapper">
-      <div class="col-md-4 image-wrapper">
-        <img src="/img/theme/team-1-800x800.jpg" alt="" class="message-image rounded-circle">
-      </div>
-      <div class="col-md-8">
-        <h4 class="message-title">Hypercool团队邀请您加入！</h4>
-        <p class="message-content">点击现在就加入我们Hypercool团队！</p>
-      </div>
-    </div>
-    <div class="row message-wrapper">
-      <div class="col-md-4 image-wrapper">
-        <img src="/img/theme/team-1-800x800.jpg" alt="" class="message-image rounded-circle">
-      </div>
-      <div class="col-md-8">
-        <h4 class="message-title">Hypercool团队邀请您加入！</h4>
-        <p class="message-content">点击现在就加入我们Hypercool团队！</p>
-      </div>
-    </div>
+    <single-message
+    :title="title"
+    :imgurl="imgurl"
+    :url="url"
+    :date="date"
+    :brief_intro="brief_intro"
+    >
+
+    </single-message>
   </section>
 </template>
 <script>
+import SingleMessage from './singleMessage.vue';
+
 export default {
-  
+  components: {
+    SingleMessage
+  },
+  data() {
+    return {
+      title: "当当无“狗血”只有书香",
+      imgurl: "/img/theme/img-1-1200x1000.jpg",
+      url: "http://localhost:8080",
+      date: "2019-10-25 14:44:05",
+      brief_intro: "10月23日深夜，互联网上迎来了今年最大的“瓜”。李国庆和俞渝在社交媒体上互撕的剧情，迅速登上各大热搜，成为网友热..."
+    }
+  }
 }
 </script>
 <style lang="scss" scoped>
 .message {
-  margin-top: -150px;
+  margin-top: -45vh;
   .message-wrapper {
     padding: 2rem;
     border-radius: .25rem;
