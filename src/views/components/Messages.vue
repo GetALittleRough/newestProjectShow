@@ -7,7 +7,22 @@
     :date="date"
     :brief_intro="brief_intro"
     >
-
+    </single-message>
+    <single-message
+    :title="title"
+    :imgurl="imgurl"
+    :url="url"
+    :date="date"
+    :brief_intro="brief_intro"
+    >
+    </single-message>
+    <single-message
+    :title="title"
+    :imgurl="imgurl"
+    :url="url"
+    :date="date"
+    :brief_intro="brief_intro"
+    >
     </single-message>
   </section>
 </template>
