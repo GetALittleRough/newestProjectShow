@@ -140,7 +140,7 @@ export default {
                 if(data.login) {
                     this.$store.dispatch('user/getInfo')
                     .then(info => {
-                        console.log(this.$store.getters.name)
+                        console.log(info)
                     })
                     this.$router.push({ path:'/', query: this.otherQuery })
                 } else {

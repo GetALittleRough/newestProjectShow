@@ -7,7 +7,15 @@ const state = {
   name: '',
   avatar: '',
   introduction: '',
-  roles: []
+  images: [],
+  workCount: 0,
+  registerCount: 0,
+  monitorCount: 0,
+  age: 0,
+  residence: '',
+  jobTitle: '',
+  workplace: '',
+  notification: 0
 }
 
 const mutations = {
@@ -25,6 +33,17 @@ const mutations = {
   },
   SET_ROLES: (state, roles) => {
     state.roles = roles
+  },
+  SET_INFO: (state, info) => {
+    state.images = info.images
+    state.workCount = info.workCount
+    state.registerCount = info.registerCount
+    state.monitorCount = info.monitorCount
+    state.age = info.age
+    state.residence = info.residence
+    state.jobTitle = info.jobTitle
+    state.workplace = info.workplace
+    state.notification = info.notification
   }
 }
 
@@ -59,10 +78,11 @@ const actions = {
           reject('Verification failed, please Login again.')
         }
 
-        const { nickname, avatar } = data
+        const { nickname, avatar, self_introduction  } = data
         // commit('SET_ROLES', roles)
         commit('SET_NAME', nickname)
         commit('SET_AVATAR', avatar)
+        commit('SET_INFO', data)
         // commit('SET_INTRODUCTION', introduction)
         resolve(data)
       }).catch(error => {
