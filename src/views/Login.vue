@@ -136,8 +136,16 @@ export default {
         },
         handleLogin() {
             this.$store.dispatch('user/login', this.loginForm)
-            .then(() => {
-                this.$router.push({ path:'/', query: this.otherQuery })
+            .then((data) => {
+                if(data.login) {
+                    this.$store.dispatch('user/getInfo')
+                    .then(info => {
+                        console.log(this.$store.getters.name)
+                    })
+                    this.$router.push({ path:'/', query: this.otherQuery })
+                } else {
+                    
+                }
             })
             .catch((err) => {
                 console.log(err)

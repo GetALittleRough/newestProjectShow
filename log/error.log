@@ -1,0 +1,29 @@
+{ level: 'warn',
+  message:
+   Error [ERR_CRYPTO_HASH_FINALIZED]: Digest already called
+       at Hash.digest (internal/crypto/hash.js:77:11)
+       at login (/Users/jason/Documents/gui/vue-argon-design-system-master/backend/controllers/controller.js:48:20)
+       at processTicksAndRejections (internal/process/next_tick.js:81:5),
+  timestamp: '2019-10-27T08:56:39.405Z' }
+{ level: 'warn',
+  message:
+   Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+       at ServerResponse.setHeader (_http_outgoing.js:482:11)
+       at ServerResponse.header (/Users/jason/Documents/gui/vue-argon-design-system-master/backend/node_modules/express/lib/response.js:767:10)
+       at ServerResponse.send (/Users/jason/Documents/gui/vue-argon-design-system-master/backend/node_modules/express/lib/response.js:170:12)
+       at ServerResponse.json (/Users/jason/Documents/gui/vue-argon-design-system-master/backend/node_modules/express/lib/response.js:267:15)
+       at ServerResponse.send (/Users/jason/Documents/gui/vue-argon-design-system-master/backend/node_modules/express/lib/response.js:158:21)
+       at login (/Users/jason/Documents/gui/vue-argon-design-system-master/backend/controllers/controller.js:60:11)
+       at processTicksAndRejections (internal/process/next_tick.js:81:5),
+  timestamp: '2019-10-27T09:17:05.574Z' }
+{ level: 'warn',
+  message:
+   Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+       at ServerResponse.setHeader (_http_outgoing.js:482:11)
+       at ServerResponse.header (/Users/jason/Documents/gui/vue-argon-design-system-master/backend/node_modules/express/lib/response.js:767:10)
+       at ServerResponse.send (/Users/jason/Documents/gui/vue-argon-design-system-master/backend/node_modules/express/lib/response.js:170:12)
+       at ServerResponse.json (/Users/jason/Documents/gui/vue-argon-design-system-master/backend/node_modules/express/lib/response.js:267:15)
+       at ServerResponse.send (/Users/jason/Documents/gui/vue-argon-design-system-master/backend/node_modules/express/lib/response.js:158:21)
+       at login (/Users/jason/Documents/gui/vue-argon-design-system-master/backend/controllers/controller.js:60:11)
+       at processTicksAndRejections (internal/process/next_tick.js:81:5),
+  timestamp: '2019-10-27T09:18:05.970Z' }

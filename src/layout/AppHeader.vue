@@ -53,7 +53,7 @@ export default {
   },
   data() {
       return {
-          username: this.$store.getters.token
+        //   username: this.$store.getters.name
       }
   },
   computed: {
@@ -64,6 +64,11 @@ export default {
             } else {
                 return false
             }
+          }
+      },
+      username: {
+          get() {
+              return this.$store.getters.name
           }
       }
   },

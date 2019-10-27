@@ -24,4 +24,5 @@ router.post('/logout', function(req, res, next) {
     }
   })
 })
+router.get('/getInfo', controller.getInfo)
 module.exports = router;
