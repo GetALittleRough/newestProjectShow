@@ -27,3 +27,14 @@
        at login (/Users/jason/Documents/gui/vue-argon-design-system-master/backend/controllers/controller.js:60:11)
        at processTicksAndRejections (internal/process/next_tick.js:81:5),
   timestamp: '2019-10-27T09:18:05.970Z' }
+{ level: 'warn',
+  message:
+   Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+       at ServerResponse.setHeader (_http_outgoing.js:470:11)
+       at ServerResponse.header (D:\bupt\gui\newestProjectShow\backend\node_modules\express\lib\response.js:767:10)
+       at ServerResponse.send (D:\bupt\gui\newestProjectShow\backend\node_modules\express\lib\response.js:170:12)
+       at ServerResponse.json (D:\bupt\gui\newestProjectShow\backend\node_modules\express\lib\response.js:267:15)
+       at ServerResponse.send (D:\bupt\gui\newestProjectShow\backend\node_modules\express\lib\response.js:158:21)
+       at login (D:\bupt\gui\newestProjectShow\backend\controllers\controller.js:51:13)
+       at process._tickCallback (internal/process/next_tick.js:68:7),
+  timestamp: '2019-10-28T09:14:53.160Z' }

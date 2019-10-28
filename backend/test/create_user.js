@@ -13,33 +13,64 @@ const user = new User({
   residence: '北京',
   jobTitle: '自由摄影师',
   self_introduction: '大家好，我是一名自由摄影师小明，很高兴能认识大家，希望大家能够喜欢我的作品',
-  images: [
+  allimages: [
     {
       url: 'http://localhost:8080/img/theme/team-1-800x800.jpg'
+    },
+    {
+      url: 'http://localhost:8080/img/theme/team-2-800x800.jpg'
+    },
+    {
+      url: 'http://localhost:8080/img/theme/team-3-800x800.jpg'
+    },
+    {
+      url: 'http://localhost:8080/img/theme/team-4-800x800.jpg'
+    },
+    {
+      url: 'http://localhost:8080/img/theme/team-1-800x800.jpg'
+    },
+    {
+      url: 'http://localhost:8080/img/theme/team-2-800x800.jpg'
+    },
+    {
+      url: 'http://localhost:8080/img/theme/team-3-800x800.jpg'
+    },
+    {
+      url: 'http://localhost:8080/img/theme/team-4-800x800.jpg'
     },
     {
       url: 'http://localhost:8080/img/theme/team-1-800x800.jpg'
     },
     {
       url: 'http://localhost:8080/img/theme/team-1-800x800.jpg'
-    },
+    }
+  ],
+  registerimages: [
     {
       url: 'http://localhost:8080/img/theme/team-1-800x800.jpg'
     },
     {
-      url: 'http://localhost:8080/img/theme/team-1-800x800.jpg'
+      url: 'http://localhost:8080/img/theme/team-2-800x800.jpg'
+    },
+    {
+      url: 'http://localhost:8080/img/theme/team-3-800x800.jpg'
+    },
+    {
+      url: 'http://localhost:8080/img/theme/team-4-800x800.jpg'
     },
     {
       url: 'http://localhost:8080/img/theme/team-1-800x800.jpg'
     },
+  ],
+  monitorimages: [
     {
       url: 'http://localhost:8080/img/theme/team-1-800x800.jpg'
     },
     {
-      url: 'http://localhost:8080/img/theme/team-1-800x800.jpg'
+      url: 'http://localhost:8080/img/theme/team-2-800x800.jpg'
     },
     {
-      url: 'http://localhost:8080/img/theme/team-1-800x800.jpg'
+      url: 'http://localhost:8080/img/theme/team-3-800x800.jpg'
     }
   ]
 });

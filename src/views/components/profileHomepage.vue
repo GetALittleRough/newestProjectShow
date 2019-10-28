@@ -6,7 +6,7 @@
                   <div class="row justify-content-center">
                       <div class="col-lg-3 order-lg-2">
                           <div class="card-profile-image">
-                              <a href="#">
+                              <a @click="editProfile()">
                                   <img v-bind:v-lazy="avatar" class="rounded-circle" v-bind:src="avatar">
                               </a>
                           </div>
@@ -58,51 +58,55 @@
                 <transition name="fade">
                   <div class="row">
                       <div class="collections col-6" v-for="(img,index) in pages" v-bind:key="index">
-                        <img v-bind:src="img" alt="index" class="collection-image">
+                        <img v-bind:src="img.url" alt="index" class="collection-image">
                       </div>
                   </div>
                 </transition>
+                <base-pagination class="pagination-nav"
+                  :perPage="perPage"
+                  :total="images.length"
+                  :align="'center'"
+                  :value="currentPage"
+                  @input="changePage"
+                  :key="1"
+                  >
+                </base-pagination>
               </tab-pane>
               <tab-pane title="登记作品">
-                  <div>
-                      <p>this is fucking amusing2.</p>
+                  <div class="row">
+                      <div class="collections col-6" v-for="(img,index) in pages2" v-bind:key="index">
+                        <img v-bind:src="img.url" alt="index" class="collection-image">
+                      </div>
                   </div>
+                  <base-pagination class="pagination-nav"
+                    :perPage="perPage"
+                    :total="registerimages.length"
+                    :align="'center'"
+                    :value="currentPage2"
+                    @input="changePage2"
+                    :key="2"
+                    >
+                  </base-pagination>
               </tab-pane>
               <tab-pane title="监测作品">
-                  <div>
-                      <p>this is fucking amusing3.</p>
+                  <div class="row">
+                      <div class="collections col-6" v-for="(img,index) in pages3" v-bind:key="index">
+                        <img v-bind:src="img.url" alt="index" class="collection-image">
+                      </div>
                   </div>
+                  <base-pagination class="pagination-nav"
+                    :perPage="perPage"
+                    :total="monitorimages.length"
+                    :align="'center'"
+                    :value="currentPage3"
+                    @input="changePage3"
+                    :key="3"
+                    >
+                  </base-pagination>
               </tab-pane>
+
             </tabs>
-            <!-- <nav aria-label="Page navigation" class="pagination-nav">
-              <ul class="pagination justify-content-center">
-                <li class="page-item disabled">
-                  <a class="page-link" href="#" tabindex="-1">
-                    <i class="fa fa-angle-left"></i>
-                    <span class="sr-only">Previous</span>
-                  </a>
-                </li>
-                <li class="page-item"><a class="page-link" href="#">1</a></li>
-                <li class="page-item active">
-                  <a class="page-link" href="#">2 <span class="sr-only">(current)</span></a>
-                </li>
-                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                <li class="page-item">
-                  <a class="page-link" href="#">
-                    <i class="fa fa-angle-right"></i>
-                    <span class="sr-only">Next</span>
-                  </a>
-                </li>
-              </ul>
-            </nav> -->
-            <base-pagination class="pagination-nav"
-              :perPage="perPage"
-              :total="images.length"
-              :align="'center'"
-              :value="currentPage"
-              @input="changePage2"
-              >
-            </base-pagination>
+            
           </div>
       </div>
   </section>
@@ -130,7 +134,13 @@ export default {
     this.workplace = info.workplace
     this.self_introduction = info.self_introduction
     this.avatar = info.avatar
+    this.images = info.allimages
+    this.monitorimages = info.monitorimages
+    this.registerimages = info.registerimages
     this.right = this.images.length > this.perPage? this.perPage: this.images.length;
+    this.right2 = this.registerimages.length > this.perPage? this.perPage: this.registerimages.length;
+    this.right3 = this.monitorimages.length > this.perPage? this.perPage: this.monitorimages.length;
+    
   },
 
   data() {
@@ -163,8 +173,16 @@ export default {
       notification: 4,
       perPage: 4,
       left: 0,
+      left2: 0,
+      left3: 0,
       right: 0,
-      currentPage: 1
+      right2: 0,
+      right3: 0,
+      currentPage: 1,
+      monitorimages: [],
+      registerimages: [],
+      currentPage2: 1,
+      currentPage3: 1
     }
   },
   methods: {
@@ -174,14 +192,51 @@ export default {
     toMessages: function() {
       this.$router.push({path: '/profile/messages'})
     },
-    changePage2: function(value) {
+    changePage: function(value) {
       this.left = (value - 1) * this.perPage;
       this.right = value * this.perPage > this.images.length? this.images.length : value * this.perPage;
       this.currentPage = value
       // this.pages = this.images.slice(left, right)
+    },
+    changePage2: function(value) {
+      this.left2 = (value - 1) * this.perPage;
+      this.right2 = value * this.perPage > this.registerimages.length? this.registerimages.length : value * this.perPage;
+      this.currentPage2 = value
+    },
+    changePage3: function(value) {
+      this.left3 = (value - 1) * this.perPage;
+      this.right3 = value * this.perPage > this.monitorimages.length? this.monitorimages.length : value * this.perPage;
+      this.currentPage3 = value
+    },
+    imageWork: function() {
+      const info = JSON.parse(localStorage.getItem('user-info'))
+      this.images = info.allimages
+    },
+    registeredWork: function() {
+      console.log('click registerwork')
+      const info = JSON.parse(localStorage.getItem('user-info'))
+      this.images = info.registerimages
+      console.log(this.images)
+    },
+    monitorWork: function() {
+      const info = JSON.parse(localStorage.getItem('user-info'))
+      this.images = info.monitorimages
     }
   },
   computed: {
+    pages() {
+      return this.images.slice(this.left, this.right)
+    },
+    pages2() {
+      // this.right = this.registerimages.length > this.perPage? this.perPage: this.images.length;
+      return this.registerimages.slice(this.left2, this.right2)
+    },
+    pages3() {
+      // this.right = this.monitorimages.length > this.perPage? this.perPage: this.images.length;
+      return this.monitorimages.slice(this.left3, this.right3)
+    }
+  },
+  watch: {
     pages() {
       return this.images.slice(this.left, this.right)
     }

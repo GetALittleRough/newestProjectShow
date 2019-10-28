@@ -56,6 +56,17 @@ export default {
         //   username: this.$store.getters.name
       }
   },
+  watch: {
+      username() {
+          const info = JSON.parse(localStorage.getItem('user-info'))
+          if(info){
+              return info.nickname
+          } else {
+              return undefined
+          }
+          
+      }
+  },
   computed: {
       loggedin: {
           get() {
@@ -68,9 +79,12 @@ export default {
       },
       username: {
           get() {
-              const info = JSON.parse(localStorage.getItem('user-info'))
-              
-              return info.nickname
+            const info = JSON.parse(localStorage.getItem('user-info'))
+            if(info){
+                return info.nickname
+            } else {
+                return undefined
+            }
           }
       }
   },

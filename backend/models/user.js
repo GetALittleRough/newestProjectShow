@@ -15,7 +15,9 @@ const User = new Schema({
   jobTitle: String,
   workplace: String,
   self_introduction: String,
-  images: [Object],
+  allimages: [Object],
+  registerimages: [Object],
+  monitorimages: [Object],
   notification: Number
 }, {collection: 'hypercool_users'})
 

@@ -76,7 +76,7 @@
                             </a>
                         </div>
                         <div class="col-6 text-right">
-                            <a href="#" class="text-light">
+                            <a href="#" class="text-light" @click="createAccount()">
                                 <small>创建新的账户</small>
                             </a>
                         </div>
@@ -160,6 +160,9 @@ export default {
                 }
                 return acc
             }, {})
+        },
+        createAccount() {
+            this.$router.push({path: '/register'})
         }
     }
 };
