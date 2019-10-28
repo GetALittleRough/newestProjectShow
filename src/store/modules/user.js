@@ -1,21 +1,22 @@
 import { login, logout, getInfo } from '../../api/user'
-import { getToken, setToken, removeToken } from '@/utils/auth'
+import { getToken, setToken, removeToken, setInfo, getInfoLocal, setInfoLocal, removeInfoLocal } from '@/utils/auth'
 import router, { resetRouter } from '@/router'
 
 const state = {
   token: getToken(),
-  name: '',
-  avatar: '',
-  introduction: '',
-  images: [],
-  workCount: 0,
-  registerCount: 0,
-  monitorCount: 0,
-  age: 0,
-  residence: '',
-  jobTitle: '',
-  workplace: '',
-  notification: 0
+  // name: '',
+  // avatar: '',
+  // introduction: '',
+  // images: [],
+  // workCount: 0,
+  // registerCount: 0,
+  // monitorCount: 0,
+  // age: 0,
+  // residence: '',
+  // jobTitle: '',
+  // workplace: '',
+  // notification: 0
+  info: getInfoLocal()
 }
 
 const mutations = {
@@ -35,15 +36,16 @@ const mutations = {
     state.roles = roles
   },
   SET_INFO: (state, info) => {
-    state.images = info.images
-    state.workCount = info.workCount
-    state.registerCount = info.registerCount
-    state.monitorCount = info.monitorCount
-    state.age = info.age
-    state.residence = info.residence
-    state.jobTitle = info.jobTitle
-    state.workplace = info.workplace
-    state.notification = info.notification
+    // state.images = info.images
+    // state.workCount = info.workCount
+    // state.registerCount = info.registerCount
+    // state.monitorCount = info.monitorCount
+    // state.age = info.age
+    // state.residence = info.residence
+    // state.jobTitle = info.jobTitle
+    // state.workplace = info.workplace
+    // state.notification = info.notification
+    state.info = info
   }
 }
 
@@ -76,15 +78,17 @@ const actions = {
 
         if (!data) {
           reject('Verification failed, please Login again.')
+        } else {
+          const { nickname, avatar, self_introduction  } = data
+          // commit('SET_ROLES', roles)
+          commit('SET_NAME', nickname)
+          commit('SET_AVATAR', avatar)
+          commit('SET_INTRODUCTION', self_introduction)
+          commit('SET_INFO', data)
+          setInfoLocal(data)
+          // commit('SET_INTRODUCTION', introduction)
+          resolve(data)
         }
-
-        const { nickname, avatar, self_introduction  } = data
-        // commit('SET_ROLES', roles)
-        commit('SET_NAME', nickname)
-        commit('SET_AVATAR', avatar)
-        commit('SET_INFO', data)
-        // commit('SET_INTRODUCTION', introduction)
-        resolve(data)
       }).catch(error => {
         reject(error)
       })
@@ -98,6 +102,7 @@ const actions = {
         commit('SET_TOKEN', '')
         commit('SET_ROLES', [])
         removeToken()
+        removeInfoLocal()
         // resetRouter()
 
         // reset visited views and cached views

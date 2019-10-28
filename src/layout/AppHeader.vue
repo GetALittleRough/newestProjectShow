@@ -68,7 +68,9 @@ export default {
       },
       username: {
           get() {
-              return this.$store.getters.name
+              const info = JSON.parse(localStorage.getItem('user-info'))
+              
+              return info.nickname
           }
       }
   },

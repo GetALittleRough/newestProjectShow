@@ -119,16 +119,17 @@ export default {
     FadeTransition
   },
   created: function() {
-    this.workCount = 10
-    this.registerCount = 5
-    this.monitorCount = 8
-    this.name = '小明'
-    this.age = 27
-    this.residence = '北京'
-    this.jobTitle = '自由摄影师'
-    this.workplace = 'Hypercool视觉研究院'
-    this.self_introduction = '大家好，我是一名自由摄影师小明，很高兴能认识大家，希望大家能够喜欢我的作品'
-    this.avatar = 'img/theme/team-4-800x800.jpg'
+    const info = JSON.parse(localStorage.getItem('user-info'))
+    this.workCount = info.workCount
+    this.registerCount = info.registerCount
+    this.monitorCount = info.monitorCount
+    this.name = info.nickname
+    this.age = info.age
+    this.residence = info.residence
+    this.jobTitle = info.jobTitle
+    this.workplace = info.workplace
+    this.self_introduction = info.self_introduction
+    this.avatar = info.avatar
     this.right = this.images.length > this.perPage? this.perPage: this.images.length;
   },
 
