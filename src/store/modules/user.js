@@ -1,4 +1,4 @@
-import { login, logout, getInfo } from '../../api/user'
+import { login, logout, getInfo, register } from '../../api/user'
 import { getToken, setToken, removeToken, setInfo, getInfoLocal, setInfoLocal, removeInfoLocal } from '@/utils/auth'
 import router, { resetRouter } from '@/router'
 
@@ -148,6 +148,26 @@ const actions = {
       dispatch('tagsView/delAllViews', null, { root: true })
 
       resolve()
+    })
+  },
+
+  // register user
+  register({ commit }, userInfo) {
+    const { username, password, mail } = userInfo
+    return new Promise((resolve, reject) => {
+      register({ username: username.trim(), password: password, mail: mail }).then(response => {
+        const { data } = response
+        console.log(data)
+        if(data.token) {
+          commit('SET_TOKEN', data.token)
+          setToken(data.token)
+          resolve(data)
+        } else {
+          reject()
+        } 
+      }).catch(error => {
+        reject(error)
+      })
     })
   }
 }

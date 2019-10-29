@@ -3,6 +3,7 @@ const Schema = mongoose.Schema
 
 const User = new Schema({
   username: String,
+  mail: String,
   password: String,
   token: String,
   avatar: String,
@@ -18,7 +19,8 @@ const User = new Schema({
   allimages: [Object],
   registerimages: [Object],
   monitorimages: [Object],
-  notification: Number
+  notification: Number,
+  registerDate: Date
 }, {collection: 'hypercool_users'})
 
 module.exports = mongoose.model('User', User)
