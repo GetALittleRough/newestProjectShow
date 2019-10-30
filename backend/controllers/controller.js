@@ -198,7 +198,7 @@ async function whetherRegister(req, res, next) {
     res.send({
       code: 20000,
       data: {
-        exist: true
+        exist: false
       }
     })
   }

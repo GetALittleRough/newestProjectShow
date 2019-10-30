@@ -177,10 +177,7 @@ const actions = {
       const input = { 'email' : email}
       whetherRegister(input).then(response => {
         const { data } = response
-        if(data.exist)
-          reject(false)
-        else
-          resolve(true)
+        resolve(data.exist)
       }).catch(err => {
         reject(err)
       })

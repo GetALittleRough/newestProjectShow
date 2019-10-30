@@ -65,6 +65,7 @@
                                             addon-left-icon="ni ni-lock-circle-open"
                                             v-model="registerForm.repeatPassword">
                                 </base-input>
+                                <p class="mailHint" v-if="passwordHint">两次输入的密码不同，请重新输入</p>
                                 <base-input alternative
                                             type="text"
                                             placeholder="验证码"
@@ -72,6 +73,7 @@
                                             v-model="registerForm.verification">
                                 
                                 </base-input>
+                                <p class="mailHint" v-if="verificationHint">请输入正确的验证码！</p>
                                 <base-identify 
                                     @click.native="newCode()"
                                     :identifyCode="identifyCode"></base-identify>
@@ -132,7 +134,7 @@
             <div class="py-3 text-center">
                 <i class="ni ni-bell-55 ni-3x"></i>
                 <h4 class="heading mt-4">请您注意</h4>
-                <p>表格所填内容不能为空！</p>
+                <p>请您正确填写表格</p>
             </div>
 
             <template slot="footer">
@@ -180,6 +182,8 @@ export default {
                 } else {
                     this.mailHint = 1
                 } 
+                newValue.password !== newValue.repeatPassword? this.passwordHint = true: this.passwordHint = false
+                newValue.verification !== this.code? this.verificationHint = true: this.verificationHint = false
             },
             deep: true
         },
@@ -205,7 +209,10 @@ export default {
             canRegister: false,
             usedName: false,
             mailHint: 0,
-            hint: ''
+            hint: '',
+            passwordHint: false,
+            passhint: '',
+            verificationHint: false
         }
     },
     methods: {
@@ -228,25 +235,28 @@ export default {
                     this.canRegister = true
                 }
             }
-            this.$store.dispatch('user/register', this.registerForm).then(data => {
+            if(this.canRegister === false && this.usedName === false && this.passwordHint === false && this.verificationHint === false) {
+                this.$store.dispatch('user/register', this.registerForm).then(data => {
                 console.log(data)
                 this.$store.dispatch('user/getInfo')
                     .then(info => {
                         console.log(info)
                     })
                     this.$router.push({ path:'/', query: this.otherQuery })
-            })
+                })
+            } else {
+                this.canRegister = true
+            }
+            
         },
         whetherRegister() {
             this.$store.dispatch('user/whetherRegister', this.registerForm.mail)
             .then(value => {
                 if(value) {
                     this.mailHint = 2
-                    console.log('registered')
                 }
             }).catch(err => {
                 this.mailHint = 0
-                console.log('OK')
             })
         }
     }
