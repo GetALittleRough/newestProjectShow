@@ -85,7 +85,11 @@
                                     </span>
                                 </base-checkbox>
                                 <div class="text-center">
+<<<<<<< HEAD
                                     <base-button type="primary" class="my-4"  @click.native.prevent="createAccount()" data-toggle="modal" data-target="#modal-notification">创建账户</base-button>
+=======
+                                    <base-button type="primary" class="my-4" @click.native.prevent="createAccount()">创建账户</base-button>
+>>>>>>> 8c1068d8630dea664cdc374ce0161a809d1fe585
                                     <base-button type="success" class="my-4" @click="goBack()">返回</base-button>
                                 </div>
                             </form>
@@ -148,11 +152,17 @@
 </template>
 <script>
 import BaseIdentify  from '../components/BaseIdentify.vue'
+<<<<<<< HEAD
 import Modal from '../components/Modal'
 export default {
     components: {
         BaseIdentify,
         Modal
+=======
+export default {
+    components: {
+        BaseIdentify
+>>>>>>> 8c1068d8630dea664cdc374ce0161a809d1fe585
     },
     computed: {
         identifyCode: {
@@ -174,8 +184,12 @@ export default {
                 password: '',
                 repeatPassword: '',
                 verification: ''
+<<<<<<< HEAD
             },
             canRegister: false
+=======
+            }
+>>>>>>> 8c1068d8630dea664cdc374ce0161a809d1fe585
         }
     },
     methods: {
@@ -193,12 +207,16 @@ export default {
             this.$router.go(-1)
         },
         createAccount() {
+<<<<<<< HEAD
             for(let item in this.registerForm) {
                 if(this.registerForm[item] === '') {
                     this.canRegister = true
                 }
             }
             
+=======
+            console.log(this.registerForm)
+>>>>>>> 8c1068d8630dea664cdc374ce0161a809d1fe585
         }
     }
 };
