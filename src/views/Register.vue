@@ -52,6 +52,7 @@
                                             addon-left-icon="ni ni-email-83"
                                             v-model="registerForm.mail">
                                 </base-input>
+                                <p class="mailHint" v-if="mailHint">{{ hint }}</p>
                                 <base-input alternative
                                             type="password"
                                             placeholder="密码"
@@ -85,11 +86,7 @@
                                     </span>
                                 </base-checkbox>
                                 <div class="text-center">
-<<<<<<< HEAD
                                     <base-button type="primary" class="my-4"  @click.native.prevent="createAccount()" data-toggle="modal" data-target="#modal-notification">创建账户</base-button>
-=======
-                                    <base-button type="primary" class="my-4" @click.native.prevent="createAccount()">创建账户</base-button>
->>>>>>> 8c1068d8630dea664cdc374ce0161a809d1fe585
                                     <base-button type="success" class="my-4" @click="goBack()">返回</base-button>
                                 </div>
                             </form>
@@ -144,7 +141,7 @@
                                 text-color="white"
                                 class="ml-auto"
                                 @click="canRegister=false">
-                    Close
+                    关闭
                 </base-button>
             </template>
         </modal>
@@ -152,17 +149,12 @@
 </template>
 <script>
 import BaseIdentify  from '../components/BaseIdentify.vue'
-<<<<<<< HEAD
 import Modal from '../components/Modal'
+import _ from 'lodash'
 export default {
     components: {
         BaseIdentify,
         Modal
-=======
-export default {
-    components: {
-        BaseIdentify
->>>>>>> 8c1068d8630dea664cdc374ce0161a809d1fe585
     },
     computed: {
         identifyCode: {
@@ -175,6 +167,31 @@ export default {
             
         }
     },
+    created: function() {
+        this.debouncedGetRegister = _.debounce(this.whetherRegister, 500)
+    },
+    watch: {
+        registerForm: {
+            handler(newValue, oldValue) {
+                const reg = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+                if(reg.test(newValue.mail)) {
+                    this.mailHint = 0
+                    this.debouncedGetRegister()
+                } else {
+                    this.mailHint = 1
+                } 
+            },
+            deep: true
+        },
+        mailHint: function(newValue) {
+            // if the format of email is not correct
+            if(newValue === 1) {
+                this.hint = '请您输入正确的邮箱'
+            } else if(newValue === 2) {
+                this.hint = '该邮箱已经被注册，请您换个邮箱注册'
+            }
+        }
+    },
     data() {
         return {
             code: this.refreshCode(4),
@@ -184,12 +201,11 @@ export default {
                 password: '',
                 repeatPassword: '',
                 verification: ''
-<<<<<<< HEAD
             },
-            canRegister: false
-=======
-            }
->>>>>>> 8c1068d8630dea664cdc374ce0161a809d1fe585
+            canRegister: false,
+            usedName: false,
+            mailHint: 0,
+            hint: ''
         }
     },
     methods: {
@@ -207,19 +223,39 @@ export default {
             this.$router.go(-1)
         },
         createAccount() {
-<<<<<<< HEAD
             for(let item in this.registerForm) {
                 if(this.registerForm[item] === '') {
                     this.canRegister = true
                 }
             }
-            
-=======
-            console.log(this.registerForm)
->>>>>>> 8c1068d8630dea664cdc374ce0161a809d1fe585
+            this.$store.dispatch('user/register', this.registerForm).then(data => {
+                console.log(data)
+                this.$store.dispatch('user/getInfo')
+                    .then(info => {
+                        console.log(info)
+                    })
+                    this.$router.push({ path:'/', query: this.otherQuery })
+            })
+        },
+        whetherRegister() {
+            this.$store.dispatch('user/whetherRegister', this.registerForm.mail)
+            .then(value => {
+                if(value) {
+                    this.mailHint = 2
+                    console.log('registered')
+                }
+            }).catch(err => {
+                this.mailHint = 0
+                console.log('OK')
+            })
         }
     }
 };
 </script>
-<style>
+<style lang="scss">
+.mailHint {
+    font-size: 0.8em;
+    margin: 0 auto;
+    color: #f5365c;
+}
 </style>

@@ -52,6 +52,7 @@
                                             v-model="loginForm.username"
                                             name="username">
                                 </base-input>
+                                
                                 <base-input alternative
                                             type="password"
                                             placeholder="密码"
@@ -60,6 +61,16 @@
                                             v-model="loginForm.password"
                                             @keyup.enter.native="handleLogin">
                                 </base-input>
+                                <base-input alternative
+                                            type="text"
+                                            placeholder="验证码"
+                                            addon-left-icon="ni ni-notification-70"
+                                            v-model="loginForm.verification">
+                                
+                                </base-input>
+                                <base-identify 
+                                    @click.native="newCode()"
+                                    :identifyCode="identifyCode"></base-identify>
                                 <base-checkbox>
                                     记住这台电脑
                                 </base-checkbox>
@@ -84,12 +95,37 @@
                 </div>
             </div>
         </div>
-        
+         <modal :show.sync="canRegister"
+                   gradient="danger"
+                modal-classes="modal-danger modal-dialog-centered">
+            <h6 slot="header" class="modal-title" id="modal-title-notification">警告</h6>
+
+            <div class="py-3 text-center">
+                <i class="ni ni-bell-55 ni-3x"></i>
+                <h4 class="heading mt-4">请您注意</h4>
+                <p>表格所填内容不能为空！</p>
+            </div>
+
+            <template slot="footer">
+                <base-button type="white" @click="canRegister=false">好的知道了</base-button>
+                <base-button type="link"
+                                text-color="white"
+                                class="ml-auto"
+                                @click="canRegister=false">
+                    关闭
+                </base-button>
+            </template>
+        </modal>
     </section>
 </template>
 <script>
+import BaseIdentify from '../components/BaseIdentify'
+import Modal from '../components/Modal'
 export default {
-    name: 'login',
+    components: {
+        BaseIdentify,
+        Modal
+    },
     data() {
         const validateUsername = (rule, value, callback) => {
             if (!validUsername(value)) {
@@ -106,9 +142,11 @@ export default {
             }
         }
         return {
+            code: this.refreshCode(4),
             loginForm: {
                 username: '',
-                password: ''
+                password: '',
+                verification: ''
             },
             loginRules: {
                 username: [{ required: true, trigger: 'blur', validator: validateUsername }],
@@ -116,11 +154,21 @@ export default {
             },
             passwordType: 'password',
             redirect: undefined,
-            otherQuery: {}
+            otherQuery: {},
+            canRegister: false,
+            usedName: false
         }
     },
-    mounted() {
-
+    computed: {
+        identifyCode: {
+            get: function() {
+                return this.code
+            },
+            set: function() {
+                this.code = this.refreshCode()
+            }
+            
+        }
     },
     methods: {
         checkCapslock({ shiftKey, key } = {}) {
@@ -145,7 +193,7 @@ export default {
                     })
                     this.$router.push({ path:'/', query: this.otherQuery })
                 } else {
-                    
+                    this.canRegister = true
                 }
             })
             .catch((err) => {
@@ -164,9 +212,24 @@ export default {
         },
         createAccount() {
             this.$router.push({path: '/register'})
-        }
+        },
+        newCode() {
+            this.code = this.refreshCode(4)
+        },
+        refreshCode(length) {
+            let randomNum = 0
+            while(randomNum < Math.pow(10, length - 1)) {
+                randomNum = Math.floor(Math.random() * Math.pow(10, length))
+            }
+            return randomNum.toString()
+        },
     }
 };
 </script>
-<style>
+<style lang="scss">
+.usedName {
+    font-size: 0.5em;
+    margin: 0 auto;
+    color: #f5365c;
+}
 </style>

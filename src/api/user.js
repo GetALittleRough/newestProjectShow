@@ -22,3 +22,19 @@ export function logout() {
     method: 'post'
   })
 }
+
+export function register(data) {
+  return request({
+    url: 'users/register',
+    method: 'post',
+    data
+  })
+}
+
+export function whetherRegister(data) {
+  return request({
+    url: 'users/whetherRegister',
+    method: 'post',
+    data
+  })
+}

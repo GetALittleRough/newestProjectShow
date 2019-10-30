@@ -25,4 +25,6 @@ router.post('/logout', function(req, res, next) {
   })
 })
 router.get('/getInfo', controller.getInfo)
+router.post('/register', controller.register)
+router.post('/whetherRegister', controller.whetherRegister)
 module.exports = router;

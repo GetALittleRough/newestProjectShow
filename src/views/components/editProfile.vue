@@ -21,19 +21,19 @@
             <b-list-group-item>
               <div class="row">
                 <div class="col-md-3">用户ID</div>
-                <div class="col-md-6">{{ id }}</div>
+                <div class="col-md-6">{{ info.mail }}</div>
               </div>
             </b-list-group-item>
             <b-list-group-item>
               <div class="row">
-                <div class="col-md-3">账户类型</div>
-                <div class="col-md-6">{{ accountType }}</div>
+                <div class="col-md-3">总作品数量</div>
+                <div class="col-md-6">{{ info.workCount }}</div>
               </div>
             </b-list-group-item>
             <b-list-group-item>
               <div class="row">
                 <div class="col-md-3">昵称</div>
-                <div class="col-md-6" v-if="!changeName">{{ nickname }}</div>
+                <div class="col-md-6" v-if="!changeName">{{ info.nickname }}</div>
                 <input type="text" class="form-control col-md-6" v-bind:placeholder="nickname" v-if="changeName" v-model="nickname">
                 <div class="col-md-3"> <base-button type="primary" @click="changeNickname()">更改</base-button></div>
               </div>
@@ -41,8 +41,16 @@
             <b-list-group-item>
               <div class="row">
                 <div class="col-md-3">注册时间</div>
-                <div class="col-md-6">{{ new Date() }}</div>
+                <div class="col-md-6">{{ info.registerDate }}</div>
                
+              </div>
+            </b-list-group-item>
+            <b-list-group-item>
+              <div class="row">
+                <div class="col-md-3">年龄</div>
+                <div class="col-md-6" v-if="!changeName">{{ nickname }}</div>
+                <input type="text" class="form-control col-md-6" v-bind:placeholder="nickname" v-if="changeName" v-model="nickname">
+                <div class="col-md-3"> <base-button type="primary" @click="changeNickname()">更改</base-button></div>
               </div>
             </b-list-group-item>
           </b-list-group>
@@ -61,11 +69,20 @@
 export default {
   data() {
     return {
-      id: 'crsong@bupt.edu.cn',
-      accountType: '个人账户',
-      nickname: 'Hypercool的开发者',
-      changeName: false
+      info: {
+        mail: 'crsong@bupt.edu.cn',
+        accountType: '个人账户',
+        nickname: 'Hypercool的开发者',
+        registerDate: new Date()
+      },
+      actions: {
+        changeName: false
+      }
     }
+  },
+  created() {
+    const info = JSON.parse(localStorage.getItem('user-info'))
+    this.info = info
   },
   methods: {
     changeNickname: function() {
