@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost:27017/', {useNewUrlParser: true});
 const User = require('../models/user')
+const driver = require('bigchaindb-driver')
+const keys = driver.Ed25519Keypair()
 const user = new User({
   mail: 'crsong@bupt.edu.cn',
   date: new Date(),
@@ -74,7 +76,9 @@ const user = new User({
     {
       url: 'http://localhost:8080/img/theme/team-3-800x800.jpg'
     }
-  ]
+  ],
+  publicKey: keys.publicKey,
+  privateKey: keys.privateKey
 });
 user.save(err => {
   if (err) {

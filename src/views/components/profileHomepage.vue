@@ -57,9 +57,21 @@
               <tab-pane title="作品集">
                 <transition name="fade">
                   <div class="row">
-                      <div class="collections col-6" v-for="(img,index) in pages" v-bind:key="index">
+                    <card shadow class="collections col-6" v-for="(img,index) in pages" v-bind:key="index">
+                      <template v-slot:header>
+                        作品n号
+                      </template>
+                      <div >
                         <img v-bind:src="img.url" alt="index" class="collection-image">
                       </div>
+                      <template v-slot:footer>
+                        <div class="row justify-content-center">
+                          <base-button type="success" @click="save()">查看</base-button>
+                          <base-button type="primary" @click="goback()">编辑</base-button>
+                        </div>
+                      </template>
+                    </card>
+                    
                   </div>
                 </transition>
                 <base-pagination class="pagination-nav"
@@ -73,26 +85,49 @@
                 </base-pagination>
               </tab-pane>
               <tab-pane title="登记作品">
-                  <div class="row">
-                      <div class="collections col-6" v-for="(img,index) in pages2" v-bind:key="index">
-                        <img v-bind:src="img.url" alt="index" class="collection-image">
+                
+                <div class="row">
+                  <card shadow class="collections col-6" v-for="(img,index) in pages2" v-bind:key="index">
+                    <template v-slot:header>
+                      作品n号
+                    </template>
+                    <div >
+                      <img v-bind:src="img.url" alt="index" class="collection-image">
+                    </div>
+                    <template v-slot:footer>
+                      <div class="row justify-content-center">
+                        <base-button type="success" @click="save()">查看</base-button>
+                        <base-button type="primary" @click="goback()">编辑</base-button>
                       </div>
-                  </div>
-                  <base-pagination class="pagination-nav"
-                    :perPage="perPage"
-                    :total="registerimages.length"
-                    :align="'center'"
-                    :value="currentPage2"
-                    @input="changePage2"
-                    :key="2"
-                    >
-                  </base-pagination>
+                    </template>
+                  </card>
+                </div>
+                <base-pagination class="pagination-nav"
+                  :perPage="perPage"
+                  :total="registerimages.length"
+                  :align="'center'"
+                  :value="currentPage2"
+                  @input="changePage2"
+                  :key="2"
+                  >
+                </base-pagination>
               </tab-pane>
               <tab-pane title="监测作品">
                   <div class="row">
-                      <div class="collections col-6" v-for="(img,index) in pages3" v-bind:key="index">
+                    <card shadow class="collections col-6" v-for="(img,index) in pages3" v-bind:key="index">
+                      <template v-slot:header>
+                        作品n号
+                      </template>
+                      <div >
                         <img v-bind:src="img.url" alt="index" class="collection-image">
                       </div>
+                      <template v-slot:footer>
+                        <div class="row justify-content-center">
+                          <base-button type="success" @click="save()">查看</base-button>
+                          <base-button type="primary" @click="goback()">编辑</base-button>
+                        </div>
+                      </template>
+                    </card>
                   </div>
                   <base-pagination class="pagination-nav"
                     :perPage="perPage"
@@ -116,11 +151,13 @@ import Tabs from '../../components/Tabs/Tabs'
 import TabPane from '../../components/Tabs/TabPane'
 import { FadeTransition } from "vue2-transitions";
 import { BasePagination } from '../../components/BasePagination';
+import Card from '../../components/Card'
 export default {
   components: {
     Tabs,
     TabPane,
-    FadeTransition
+    FadeTransition,
+    Card
   },
   created: function() {
     const info = JSON.parse(localStorage.getItem('user-info'))
@@ -250,5 +287,9 @@ export default {
 }
 .pagination-nav {
   margin-top: 5vh;
+}
+.collections {
+  max-width: 45%;
+  margin: 2vh auto;
 }
 </style>

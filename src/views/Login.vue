@@ -52,7 +52,7 @@
                                             v-model="loginForm.username"
                                             name="username">
                                 </base-input>
-                                
+                                <p class="mailHint" v-if="mailHint">{{ hint }}</p>
                                 <base-input alternative
                                             type="password"
                                             placeholder="密码"
@@ -68,6 +68,7 @@
                                             v-model="loginForm.verification">
                                 
                                 </base-input>
+                                <p class="mailHint" v-if="verificationHint">{{veriHint}}</p>
                                 <base-identify 
                                     @click.native="newCode()"
                                     :identifyCode="identifyCode"></base-identify>
@@ -103,7 +104,7 @@
             <div class="py-3 text-center">
                 <i class="ni ni-bell-55 ni-3x"></i>
                 <h4 class="heading mt-4">请您注意</h4>
-                <p>表格所填内容不能为空！</p>
+                <p>{{ message }}</p>
             </div>
 
             <template slot="footer">
@@ -156,7 +157,23 @@ export default {
             redirect: undefined,
             otherQuery: {},
             canRegister: false,
-            usedName: false
+            usedName: false,
+            mailHint: false,
+            hint: '请您输入正确的邮箱格式！',
+            verificationHint: false,
+            veriHint: '请您输入正确的验证码！',
+            message: '请您正确填写表格'
+        }
+    },
+    watch: {
+        loginForm: {
+            handler(newValue, oldValue) {
+                this.message = '请您正确填写表格'
+                const reg = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+                reg.test(newValue.username)? this.mailHint = false: this.mailHint = true
+                newValue.verification === this.code? this.verificationHint = false: this.verificationHint = true
+            },
+            deep: true
         }
     },
     computed: {
@@ -184,23 +201,33 @@ export default {
             }
         },
         handleLogin() {
-            this.$store.dispatch('user/login', this.loginForm)
-            .then((data) => {
-                if(data.login) {
-                    this.$store.dispatch('user/getInfo')
-                    .then(info => {
-                        console.log(info)
-                    })
-                    this.$router.push({ path:'/', query: this.otherQuery })
-                } else {
+            for(let item in this.loginForm) {
+                if(this.loginForm[item] === '') {
                     this.canRegister = true
                 }
-            })
-            .catch((err) => {
-                console.log(err)
-                console.log('login failed')
-                this.loading = false
-            })
+            }
+            if(this.canRegister === false && this.mailHint === false && this.verificationHint === false) {
+                this.$store.dispatch('user/login', this.loginForm)
+                .then((data) => {
+                    console.log(data)
+                    if(data.login) {
+                        this.$store.dispatch('user/getInfo')
+                        .then(info => {
+                            console.log(info)
+                        })
+                        this.$router.push({ path:'/', query: this.otherQuery })
+                    } else {
+                        this.message = '您输入的用户名或者密码不正确，登录失败'
+                        this.canRegister = true
+                    }
+                })
+                .catch((err) => {
+                    console.log(err)
+                    console.log('login failed')
+                    this.loading = false
+                })
+            }
+            
         },
         getOtherQuery(query) {
             return Object.keys(query).reduce((acc, cur) => {
@@ -229,6 +256,11 @@ export default {
 <style lang="scss">
 .usedName {
     font-size: 0.5em;
+    margin: 0 auto;
+    color: #f5365c;
+}
+.mailHint {
+    font-size: 0.8em;
     margin: 0 auto;
     color: #f5365c;
 }
