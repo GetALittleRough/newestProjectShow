@@ -209,17 +209,18 @@ export default {
             if(this.canRegister === false && this.mailHint === false && this.verificationHint === false) {
                 this.$store.dispatch('user/login', this.loginForm)
                 .then((data) => {
-                    console.log(data)
                     if(data.login) {
-                        this.$store.dispatch('user/getInfo')
-                        .then(info => {
-                            console.log(info)
-                        })
+                        
                         this.$router.push({ path:'/', query: this.otherQuery })
+                        return this.$store.dispatch('user/getInfo')
                     } else {
                         this.message = '您输入的用户名或者密码不正确，登录失败'
                         this.canRegister = true
+                        return new Promise((resolve, reject) => {reject('user log in failed')})
                     }
+                })
+                .then(info => {
+                    
                 })
                 .catch((err) => {
                     console.log(err)

@@ -59,15 +59,15 @@
                   <div class="row">
                     <card shadow class="collections col-6" v-for="(img,index) in pages" v-bind:key="index">
                       <template v-slot:header>
-                        作品n号
+                        {{img.title}}
                       </template>
                       <div >
                         <img v-bind:src="img.url" alt="index" class="collection-image">
                       </div>
                       <template v-slot:footer>
                         <div class="row justify-content-center">
-                          <base-button type="success" @click="save()">查看</base-button>
-                          <base-button type="primary" @click="goback()">编辑</base-button>
+                          <base-button type="success" @click="checkImage(img._id)">查看</base-button>
+                          <base-button type="primary" @click="editImage(img._id)">编辑</base-button>
                         </div>
                       </template>
                     </card>
@@ -258,6 +258,12 @@ export default {
     monitorWork: function() {
       const info = JSON.parse(localStorage.getItem('user-info'))
       this.images = info.monitorimages
+    },
+    checkImage: function(id) {
+      console.log(id)
+    },
+    editImage: function(id) {
+      console.log(id)
     }
   },
   computed: {

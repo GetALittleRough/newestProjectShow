@@ -6,6 +6,10 @@ const Image = new Schema({
     type: String,
     required: true
   },
+  title: {
+    type: String,
+    required: true
+  },
   owner: Schema.Types.ObjectId
 }, {collection: 'hypercool_users'})
 

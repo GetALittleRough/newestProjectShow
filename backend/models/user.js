@@ -9,6 +9,7 @@ const User = new Schema({
     required: true,
     unique: true
   },
+  date: Date,
   password: String,
   token: String,
   avatar: String,

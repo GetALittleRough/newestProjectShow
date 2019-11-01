@@ -34,23 +34,22 @@
               <div class="row">
                 <div class="col-md-3">昵称</div>
                 <div class="col-md-6" v-if="!changeName">{{ info.nickname }}</div>
-                <input type="text" class="form-control col-md-6" v-bind:placeholder="nickname" v-if="changeName" v-model="nickname">
+                <input type="text" class="form-control col-md-6" v-bind:placeholder="info.nickname" v-if="changeName" v-model="info.nickname">
                 <div class="col-md-3"> <base-button type="primary" @click="changeNickname()">更改</base-button></div>
-              </div>
-            </b-list-group-item>
-            <b-list-group-item>
-              <div class="row">
-                <div class="col-md-3">注册时间</div>
-                <div class="col-md-6">{{ info.registerDate }}</div>
-               
               </div>
             </b-list-group-item>
             <b-list-group-item>
               <div class="row">
                 <div class="col-md-3">年龄</div>
-                <div class="col-md-6" v-if="!changeName">{{ nickname }}</div>
-                <input type="text" class="form-control col-md-6" v-bind:placeholder="nickname" v-if="changeName" v-model="nickname">
-                <div class="col-md-3"> <base-button type="primary" @click="changeNickname()">更改</base-button></div>
+                <div class="col-md-6" v-if="!changeAge">{{ info.age }}</div>
+                <input type="text" class="form-control col-md-6" v-bind:placeholder="info.age" v-if="changeAge" v-model="info.age">
+                <div class="col-md-3"> <base-button type="primary" @click="changeUserAge()">更改</base-button></div>
+              </div>
+            </b-list-group-item>
+             <b-list-group-item>
+              <div class="row">
+                <div class="col-md-3">注册时间</div>
+                <div class="col-md-6">{{ info.date }}</div>
               </div>
             </b-list-group-item>
           </b-list-group>
@@ -75,9 +74,8 @@ export default {
         nickname: 'Hypercool的开发者',
         registerDate: new Date()
       },
-      actions: {
-        changeName: false
-      }
+      changeName: false,
+      changeAge: false
     }
   },
   created() {
@@ -90,6 +88,9 @@ export default {
         
       }
       this.changeName = !this.changeName
+    },
+    changeUserAge() {
+      this.changeAge = !this.changeAge
     },
     save: function() {
       
