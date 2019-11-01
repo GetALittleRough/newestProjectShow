@@ -7,7 +7,7 @@
   },
   "dependencies": {
     "base-x": "^3.0.4",
-    "bigchaindb-driver": "^4.1.0",
+    "bigchaindb-driver": "4.1.0",
     "bip39": "^2.5.0",
     "cookie-parser": "~1.4.3",
     "cors": "^2.8.5",
