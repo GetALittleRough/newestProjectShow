@@ -58,7 +58,7 @@
               <div class="row">
                 <div class="col-md-3">职位</div>
                 <div class="col-md-6" v-if="!changeJob">{{ info.jobTitle }}</div>
-                <input type="text" class="form-control col-md-6" v-bind:placeholder="info.age" v-if="changeJob" v-model="info.jobTitle">
+                <input type="text" class="form-control col-md-6" v-bind:placeholder="info.jobTitle" v-if="changeJob" v-model="info.jobTitle">
                 <div class="col-md-3"> <base-button type="primary" @click="changeUserJob()">更改</base-button></div>
               </div>
             </b-list-group-item>
@@ -66,7 +66,7 @@
               <div class="row">
                 <div class="col-md-3">自我介绍</div>
                 <div class="col-md-6" v-if="!changeIntro">{{ info.self_introduction }}</div>
-                <input type="text" class="form-control col-md-6" v-bind:placeholder="info.age" v-if="changeIntro" v-model="info.self_introduction">
+                <input type="text" class="form-control col-md-6" v-bind:placeholder="info.self_introduction" v-if="changeIntro" v-model="info.self_introduction">
                 <div class="col-md-3"> <base-button type="primary" @click="changeUserIntro()">更改</base-button></div>
               </div>
             </b-list-group-item>
@@ -85,7 +85,8 @@
              <b-list-group-item>
               <div class="row">
                 <div class="col-md-3">私钥</div>
-                <div class="col-md-6">{{ info.privateKey }}</div>
+                <div class="col-md-6">{{ privateKey }}</div>
+                <div class="col-md-3"> <base-button type="primary" @click="checkPrivKey()">查看</base-button></div>
               </div>
             </b-list-group-item>
           </b-list-group>
@@ -111,7 +112,11 @@ export default {
         registerDate: new Date()
       },
       changeName: false,
-      changeAge: false
+      changeAge: false,
+      changeResidence: false,
+      changeJob: false,
+      changeIntro: false,
+      privateKey: ''
     }
   },
   created() {
@@ -127,6 +132,19 @@ export default {
     },
     changeUserAge() {
       this.changeAge = !this.changeAge
+    },
+    changeUserResidence() {
+      this.changeResidence = !this.changeResidence
+    },
+    changeUserJob() {
+      this.changeJob = !this.changeJob
+    },
+    changeUserIntro() {
+      this.changeIntro = !this.changeIntro
+    },
+    checkPrivKey() {
+      this.privateKey = new String('*' * this.info.privateKey.length)
+      console.log(this.privateKey)
     },
     save: function() {
       
