@@ -46,10 +46,46 @@
                 <div class="col-md-3"> <base-button type="primary" @click="changeUserAge()">更改</base-button></div>
               </div>
             </b-list-group-item>
-             <b-list-group-item>
+            <b-list-group-item>
+              <div class="row">
+                <div class="col-md-3">居住地</div>
+                <div class="col-md-6" v-if="!changeResidence">{{ info.residence }}</div>
+                <input type="text" class="form-control col-md-6" v-bind:placeholder="info.residence" v-if="changeResidence" v-model="info.residence">
+                <div class="col-md-3"> <base-button type="primary" @click="changeUserResidence()">更改</base-button></div>
+              </div>
+            </b-list-group-item>
+            <b-list-group-item>
+              <div class="row">
+                <div class="col-md-3">职位</div>
+                <div class="col-md-6" v-if="!changeJob">{{ info.jobTitle }}</div>
+                <input type="text" class="form-control col-md-6" v-bind:placeholder="info.age" v-if="changeJob" v-model="info.jobTitle">
+                <div class="col-md-3"> <base-button type="primary" @click="changeUserJob()">更改</base-button></div>
+              </div>
+            </b-list-group-item>
+            <b-list-group-item>
+              <div class="row">
+                <div class="col-md-3">自我介绍</div>
+                <div class="col-md-6" v-if="!changeIntro">{{ info.self_introduction }}</div>
+                <input type="text" class="form-control col-md-6" v-bind:placeholder="info.age" v-if="changeIntro" v-model="info.self_introduction">
+                <div class="col-md-3"> <base-button type="primary" @click="changeUserIntro()">更改</base-button></div>
+              </div>
+            </b-list-group-item>
+            <b-list-group-item>
               <div class="row">
                 <div class="col-md-3">注册时间</div>
                 <div class="col-md-6">{{ info.date }}</div>
+              </div>
+            </b-list-group-item>
+             <b-list-group-item>
+              <div class="row">
+                <div class="col-md-3">公钥</div>
+                <div class="col-md-6">{{ info.publicKey }}</div>
+              </div>
+            </b-list-group-item>
+             <b-list-group-item>
+              <div class="row">
+                <div class="col-md-3">私钥</div>
+                <div class="col-md-6">{{ info.privateKey }}</div>
               </div>
             </b-list-group-item>
           </b-list-group>
