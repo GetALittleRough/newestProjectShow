@@ -38,3 +38,11 @@ export function whetherRegister(data) {
     data
   })
 }
+
+export function setInformation(data) {
+  return request({
+    url: 'users/setInfo',
+    method: 'post',
+    data
+  })
+}

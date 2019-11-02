@@ -202,7 +202,74 @@ async function whetherRegister(req, res, next) {
       }
     })
   }
-  
+}
+
+/**
+ * set information for users in editProfile page
+ * @param {JSON} req information that the user what to save
+ * @param {JSON} res whether the user successed 
+ * @param {func} next middleware
+ */
+async function setInfo(req, res, next) {
+  const {mail, nickname, age, residence, jobTitle, self_introduction} = req.body
+  try {
+    const result = await User.update({mail: mail},
+                                  {$set: {nickname: nickname,
+                                          age: age,
+                                          residence: residence,
+                                          jobTitle: jobTitle,
+                                          self_introduction: self_introduction}})
+    if(result) {
+      res.send({
+        code: 20000,
+        data: {
+          update: true
+        }
+      })
+    }
+  } catch (err) {
+    logger.warnLog('error while updating user' + err)
+    res.send({
+      code: 20000,
+      data: {
+        update: false
+      }
+    })
+  }
+}
+
+async function handleUpload(req, res, next) {
+  const { mail } = req.body
+  const imgUrl = `${config.serverUrl}/images/${req.file.filename}`
+  try {
+    if(req.file) {
+      const result = await User.updateOne({mail: mail},
+                                          {$set: {avatar: imgUrl}})
+      if(result) {
+        res.send({
+          code: 20000,
+          data: {
+            upload: true
+          }
+        })
+      } else {
+        res.send({
+          code: 20000,
+          data: {
+            upload: false
+          }
+        })
+      }
+    }
+  } catch(err) {
+    logger.warnLog('error while saving avatar image' + err)
+    res.send({
+      code: 20000,
+      data: {
+        upload: false,
+      }
+    })
+  }
   
   
 }
@@ -210,5 +277,7 @@ module.exports = {
   login: login,
   getInfo: getInfo,
   register: register,
-  whetherRegister: whetherRegister
+  whetherRegister: whetherRegister,
+  setInfo: setInfo,
+  handleUpload: handleUpload
 }

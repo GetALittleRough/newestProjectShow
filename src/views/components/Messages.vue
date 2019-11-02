@@ -1,5 +1,5 @@
 <template>
-  <section class="container message">
+  <section class="container message mt--300">
     <single-message
     :title="title"
     :imgurl="imgurl"
@@ -37,7 +37,7 @@ export default {
     return {
       title: "当当无“狗血”只有书香",
       imgurl: "/img/theme/img-1-1200x1000.jpg",
-      url: "http://localhost:8080",
+      url: "article",
       date: "2019-10-25 14:44:05",
       brief_intro: "10月23日深夜，互联网上迎来了今年最大的“瓜”。李国庆和俞渝在社交媒体上互撕的剧情，迅速登上各大热搜，成为网友热..."
     }
@@ -46,7 +46,6 @@ export default {
 </script>
 <style lang="scss" scoped>
 .message {
-  margin-top: -45vh;
   .message-wrapper {
     padding: 2rem;
     border-radius: .25rem;

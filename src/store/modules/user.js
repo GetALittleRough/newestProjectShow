@@ -1,4 +1,4 @@
-import { login, logout, getInfo, register, whetherRegister } from '../../api/user'
+import { login, logout, getInfo, register, whetherRegister, setInformation } from '../../api/user'
 import { getToken, setToken, removeToken, setInfo, getInfoLocal, setInfoLocal, removeInfoLocal } from '@/utils/auth'
 import router, { resetRouter } from '@/router'
 
@@ -178,6 +178,19 @@ const actions = {
         const { data } = response
         resolve(data.exist)
       }).catch(err => {
+        reject(err)
+      })
+    })
+  },
+
+  // set information in edit profile page
+  setInformation({commit}, data) {
+    return new Promise((resolve, reject) => {
+      setInformation(data)
+      .then(response => {
+        resolve(response.data)
+      })
+      .catch(err => {
         reject(err)
       })
     })

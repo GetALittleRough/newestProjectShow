@@ -11,6 +11,7 @@ import Profile from "./views/Profile.vue";
 import profileHomepage from './views/components/profileHomepage.vue';
 import editProfile from './views/components/editProfile.vue'
 import MessagesComponent from './views/components/Messages.vue'
+import Article from './views/components/Article.vue'
 
 Vue.use(Router);
 
@@ -81,6 +82,13 @@ export default new Router({
           name: 'message',
           components: {
             default: MessagesComponent
+          }
+        },
+        {
+          path: 'article',
+          name: 'article',
+          components: {
+            default: Article
           }
         }
       ]

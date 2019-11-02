@@ -54,46 +54,51 @@ export default {
   data() {
       return {
         //   username: this.$store.getters.name
+        username: ''
       }
+  },
+  created: function() {
+    const info = JSON.parse(localStorage.getItem('user-info'))
+    this.username = info.nickname
   },
   watch: {
       username() {
-          const info = JSON.parse(localStorage.getItem('user-info'))
-          if(info){
-              return info.nickname
-          } else {
-              return undefined
-          }
-          
+        const info = JSON.parse(localStorage.getItem('user-info'))
+        if(info){
+          return info.nickname
+        } else {
+          return undefined
+        }
+        
       }
   },
   computed: {
       loggedin: {
-          get() {
-            if (this.$store.getters.token) {
-                return true
-            } else {
-                return false
-            }
+        get() {
+          if (this.$store.getters.token) {
+              return true
+          } else {
+              return false
           }
+        }
       },
-      username: {
-          get() {
-            const info = JSON.parse(localStorage.getItem('user-info'))
-            if(info){
-                return info.nickname
-            } else {
-                return undefined
-            }
-          }
-      }
+      // username: {
+      //   get() {
+      //     const info = JSON.parse(localStorage.getItem('user-info'))
+      //     if(info){
+      //         return info.nickname
+      //     } else {
+      //         return undefined
+      //     }
+      //   }
+      // }
   },
   methods: {
       toLogin() {
-          this.$router.push({ path: 'login' })
+          this.$router.push({ path: '/login' })
       },
       toProfile() {
-          this.$router.push({ path: 'profile'})
+          this.$router.push({ path: '/profile'})
       },
       logout() {
           this.$store.dispatch('user/logout')

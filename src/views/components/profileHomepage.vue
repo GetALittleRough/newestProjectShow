@@ -51,7 +51,7 @@
                   </div>
               </div>
           </card>
-          
+          <tiny-mice></tiny-mice>
           <div class="text-center mt-10 justify-content-center">
             <tabs>
               <tab-pane title="作品集">
@@ -152,12 +152,14 @@ import TabPane from '../../components/Tabs/TabPane'
 import { FadeTransition } from "vue2-transitions";
 import { BasePagination } from '../../components/BasePagination';
 import Card from '../../components/Card'
+import tinyMice from '../components/tinymise'
 export default {
   components: {
     Tabs,
     TabPane,
     FadeTransition,
-    Card
+    Card,
+    tinyMice
   },
   created: function() {
     const info = JSON.parse(localStorage.getItem('user-info'))

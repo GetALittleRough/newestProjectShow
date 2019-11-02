@@ -20,12 +20,15 @@ import App from "./App.vue";
 import router from "./router";
 import './permission';
 import Argon from "./plugins/argon-kit";
+import element from 'element-ui'
+import 'element-ui/lib/theme-chalk/index.css'
 import store from "./store"
 import './registerServiceWorker';
 import BootstrapVue from 'bootstrap-vue';
 
 
 Vue.use(BootstrapVue);
+Vue.use(element)
 Vue.config.productionTip = false;
 Vue.use(Argon);
 new Vue({

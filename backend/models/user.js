@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 const Image = require('./image').schema
+const Article = require('./article').schema
 
 const User = new Schema({
   username: String,
@@ -36,7 +37,8 @@ const User = new Schema({
     required: true,
     unique: true,
     type: String
-  }
+  },
+  articles: [Article]
 }, {collection: 'hypercool_users'})
 
 module.exports = mongoose.model('User', User)

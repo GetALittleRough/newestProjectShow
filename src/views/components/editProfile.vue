@@ -40,6 +40,14 @@
             </b-list-group-item>
             <b-list-group-item>
               <div class="row">
+                <div class="col-md-3">头像</div>
+                <div class="col-md-9">
+                  <image-upload></image-upload>
+                </div>
+              </div>
+            </b-list-group-item>
+            <b-list-group-item>
+              <div class="row">
                 <div class="col-md-3">年龄</div>
                 <div class="col-md-6" v-if="!changeAge">{{ info.age }}</div>
                 <input type="text" class="form-control col-md-6" v-bind:placeholder="info.age" v-if="changeAge" v-model="info.age">
@@ -99,10 +107,48 @@
         </div>
       </template>
     </card>
+    <modal :show.sync="saveStatus">
+                <h6 slot="header" class="modal-title" id="modal-title-default">提醒</h6>
+
+                登录成功
+
+                <template slot="footer">
+                    <base-button type="primary" @click="goback">确定</base-button>
+                    <base-button type="link" class="ml-auto" @click="saveStatus=false">关闭
+                    </base-button>
+                </template>
+            </modal>
+    <modal :show.sync="saveFailure"
+                   gradient="danger"
+                modal-classes="modal-danger modal-dialog-centered">
+            <h6 slot="header" class="modal-title" id="modal-title-notification">警告</h6>
+
+            <div class="py-3 text-center">
+                <i class="ni ni-bell-55 ni-3x"></i>
+                <h4 class="heading mt-4">请您注意</h4>
+                <p>保存信息失败</p>
+            </div>
+
+            <template slot="footer">
+                <base-button type="white" @click="goback">好的知道了</base-button>
+                <base-button type="link"
+                                text-color="white"
+                                class="ml-auto"
+                                @click="saveFailure=false">
+                    关闭
+                </base-button>
+            </template>
+        </modal>
   </div>
 </template>
 <script>
+import Modal from '../../components/Modal'
+import ImageUpload from '@/components/ImageUpload'
 export default {
+  components: {
+    Modal,
+    ImageUpload
+  },
   data() {
     return {
       info: {
@@ -116,12 +162,19 @@ export default {
       changeResidence: false,
       changeJob: false,
       changeIntro: false,
-      privateKey: ''
+      privateKey: '',
+      saveStatus: false,
+      saveFailure: false
     }
   },
   created() {
     const info = JSON.parse(localStorage.getItem('user-info'))
     this.info = info
+    this.privateKey = this.info.privateKey
+    this.privateKey = this.privateKey.split('')
+    this.privateKey = this.privateKey.map((value) => {
+      value = '$'
+    }).toString()
   },
   methods: {
     changeNickname: function() {
@@ -143,11 +196,29 @@ export default {
       this.changeIntro = !this.changeIntro
     },
     checkPrivKey() {
-      this.privateKey = new String('*' * this.info.privateKey.length)
-      console.log(this.privateKey)
+      this.privateKey = this.info.privateKey
     },
     save: function() {
-      
+      const data = {
+        mail: this.info.mail,
+        nickname: this.info.nickname,
+        age: this.info.age,
+        residence: this.info.residence,
+        jobTitle: this.info.jobTitle,
+        self_introduction: this.info.self_introduction
+      }
+      this.$store.dispatch('user/setInformation', data)
+      .then(result => {
+        if(result.update) {
+          this.saveStatus = true
+          return this.$store.dispatch('user/getInfo')
+        }
+      })
+      .then(data => {
+      })
+      .catch(err => {
+        this.saveFailure = true
+      })
     },
     goback: function() {
       this.$router.go(-1)
