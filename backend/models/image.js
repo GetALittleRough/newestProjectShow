@@ -10,7 +10,9 @@ const Image = new Schema({
     type: String,
     required: true
   },
-  owner: Schema.Types.ObjectId
-}, {collection: 'hypercool_users'})
+  owner: String,
+  ipfs_hash: String,
+  otherInfo: Object
+}, {collection: 'image'})
 
 module.exports = mongoose.model('Image', Image)

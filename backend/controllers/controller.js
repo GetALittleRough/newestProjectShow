@@ -3,10 +3,16 @@
  * @author Jason Song created at 2019-10-27 10:41:00
  */
 const User = require('../models/user')
+const Image = require('../models/image')
 const Logger = require('../utils/logger')
 const logger = new Logger();
 const crypto = require('crypto')
 const config = require('../config/config').config
+const ipfsAPI = require('ipfs-api')
+const ipfs = ipfsAPI({host: 'localhost', port: '5001', protocol: 'http'});
+const fs = require('fs')
+const driver = require('bigchaindb-driver')
+const conn = new driver.Connection(config.api_path)
 
 /**
  * handle login
@@ -280,8 +286,97 @@ async function handleUpload(req, res, next) {
 
 async function multiUpload(req, res, next) {
   const { mail } = req.body
-  console.log(mail)
-  console.log(req.files)
+  
+  try {
+    const {arr, infoArr} = await multiUploadInner(req.files, mail)
+    const user = await User.findOne({'mail': mail})
+    arr.forEach(img => {
+      user.allimages.push(img)
+    })
+    const result = await user.save()
+    if(result) {
+      res.send({
+        code: 20000,
+        data: {
+          upload: true,
+          imageInfos: infoArr
+        }
+      })
+    } else {
+      res.send({
+        code: 20000,
+        data: {
+          upload: false,
+        }
+      })
+    }
+  } catch(err) {
+    logger.warnLog('error in multiUpload' + err)
+    res.send({
+      code: 20000,
+      data: {
+        upload: false
+      }
+    })
+  }
+}
+
+function multiUploadInner(files, mail) {
+  return new Promise((resolve, reject) => {
+    const arr = []
+    const infoArr = []
+    let flag = 0
+    const length = files.length
+    files.forEach(async file => {
+      let imgUrl = `${config.serverUrl}/images/${file.filename}`
+      try {
+        let user = await User.findOne({mail: mail})
+        let hashArr  = await ipfs.add(fs.readFileSync(`${file.destination}/${file.filename}`))
+        let hash = hashArr[0].hash
+        let publicKey = user.publicKey
+        let privateKey = user.privateKey
+        let assetData = {
+          img: {
+            url: imgUrl,
+            ipfs_hash: hash
+          }
+        }
+        let metaData = {
+          'transfer': 'earth'
+        }
+        let txCreateSimple = driver.Transaction.makeCreateTransaction(
+          assetData,
+          metaData,
+  
+          // A transaction needs an output
+          [ driver.Transaction.makeOutput(
+                  driver.Transaction.makeEd25519Condition(publicKey))
+          ],
+          publicKey
+        )
+        let txCreateSimpleSigned = driver.Transaction.signTransaction(txCreateSimple, privateKey)
+        let otherInfo = await conn.postTransactionCommit(txCreateSimpleSigned)
+        infoArr.push(otherInfo)
+        let img = new Image({
+          url: imgUrl,
+          title: file.originalname,
+          owner: mail,
+          ipfs_hash: hash,
+          otherInfo: otherInfo
+        })
+        let result = await img.save()
+        arr.push(img)
+        flag += 1
+        if(flag === length) {
+          resolve({'arr': arr, 'infoArr': infoArr})
+        }
+      } catch(err) {  
+        logger.warnLog('error in multiUpload' + err)
+        reject(err)
+      }
+      
+    })
+  })
 }
 module.exports = {
   login: login,

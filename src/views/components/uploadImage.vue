@@ -59,6 +59,7 @@ export default {
       formData.append('mail', info.mail)
       console.log(formData)
       axios.post('http://localhost:3000/users/multiUpload', formData, headerConfig).then(res => {
+        console.log(res)
         return this.$store.dispatch('user/getInfo')
       })
       .then(data => {

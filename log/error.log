@@ -141,3 +141,22 @@
        at login (D:\bupt\gui\newestProjectShow\backend\controllers\controller.js:61:11)
        at process._tickCallback (internal/process/next_tick.js:68:7),
   timestamp: '2019-11-01T06:38:20.618Z' }
+{ level: 'warn',
+  message:
+   'error in multiUploadReferenceError: otherInfo is not defined',
+  timestamp: '2019-11-03T16:29:51.506Z' }
+{ level: 'warn',
+  message: 'error in multiUploadReferenceError: mail is not defined',
+  timestamp: '2019-11-03T16:56:02.759Z' }
+{ level: 'warn',
+  message: 'error in multiUploadReferenceError: mail is not defined',
+  timestamp: '2019-11-03T16:56:02.762Z' }
+{ level: 'warn',
+  message: 'error in multiUploadReferenceError: mail is not defined',
+  timestamp: '2019-11-03T16:56:02.763Z' }
+{ level: 'warn',
+  message: 'error in multiUploadReferenceError: mail is not defined',
+  timestamp: '2019-11-03T16:56:02.763Z' }
+{ level: 'warn',
+  message: 'error in multiUploadReferenceError: mail is not defined',
+  timestamp: '2019-11-03T16:56:02.764Z' }
