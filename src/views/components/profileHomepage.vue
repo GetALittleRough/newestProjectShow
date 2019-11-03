@@ -35,12 +35,13 @@
                       </div>
                   </div>
                   <div class="text-center mt-5">
-                      <h3>{{ name }}
-                          <span class="font-weight-light">, {{ age }} 岁</span>
-                      </h3>
-                      <div class="h6 font-weight-300"><i class="ni location_pin mr-2"></i>{{ residence }}</div>
-                      <div class="h6 mt-4"><i class="ni business_briefcase-24 mr-2"></i>{{ jobTitle }}</div>
-                      <div><i class="ni education_hat mr-2"></i>{{ workplace }}</div>
+                    <base-button type="warning" @click="uploadWork" class="upload-button"><i class="ni ni-cloud-upload-96"></i>上传作品</base-button>
+                    <h3>{{ name }}
+                        <span class="font-weight-light">, {{ age }} 岁</span>
+                    </h3>
+                    <div class="h6 font-weight-300"><i class="ni location_pin mr-2"></i>{{ residence }}</div>
+                    <div class="h6 mt-4"><i class="ni business_briefcase-24 mr-2"></i>{{ jobTitle }}</div>
+                    <div><i class="ni education_hat mr-2"></i>{{ workplace }}</div>
                   </div>
                   <div class="mt-5 py-5 border-top text-center">
                       <div class="row justify-content-center">
@@ -51,7 +52,6 @@
                   </div>
               </div>
           </card>
-          <tiny-mice></tiny-mice>
           <div class="text-center mt-10 justify-content-center">
             <tabs>
               <tab-pane title="作品集">
@@ -266,6 +266,9 @@ export default {
     },
     editImage: function(id) {
       console.log(id)
+    },
+    uploadWork: function() {
+      this.$router.push({path: '/profile/uploadImage'})
     }
   },
   computed: {
@@ -299,5 +302,8 @@ export default {
 .collections {
   max-width: 45%;
   margin: 2vh auto;
+}
+.upload-button {
+  margin-bottom: 3vh;
 }
 </style>

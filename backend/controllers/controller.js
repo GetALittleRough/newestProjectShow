@@ -238,6 +238,12 @@ async function setInfo(req, res, next) {
   }
 }
 
+/**
+ * handle user upload avatar
+ * @param {mail, file} req mail and the avatar of user
+ * @param {Boolean} res whether upload avatar succeeded or not
+ * @param {func} next middleware
+ */
 async function handleUpload(req, res, next) {
   const { mail } = req.body
   const imgUrl = `${config.serverUrl}/images/${req.file.filename}`
@@ -270,8 +276,12 @@ async function handleUpload(req, res, next) {
       }
     })
   }
-  
-  
+}
+
+async function multiUpload(req, res, next) {
+  const { mail } = req.body
+  console.log(mail)
+  console.log(req.files)
 }
 module.exports = {
   login: login,
@@ -279,5 +289,6 @@ module.exports = {
   register: register,
   whetherRegister: whetherRegister,
   setInfo: setInfo,
-  handleUpload: handleUpload
+  handleUpload: handleUpload,
+  multiUpload: multiUpload
 }

@@ -12,6 +12,7 @@ import profileHomepage from './views/components/profileHomepage.vue';
 import editProfile from './views/components/editProfile.vue'
 import MessagesComponent from './views/components/Messages.vue'
 import Article from './views/components/Article.vue'
+import UploadImage from './views/components/uploadImage.vue'
 
 Vue.use(Router);
 
@@ -89,6 +90,13 @@ export default new Router({
           name: 'article',
           components: {
             default: Article
+          }
+        },
+        {
+          path: 'uploadImage',
+          name: 'uploadImage',
+          components: {
+            default: UploadImage
           }
         }
       ]
