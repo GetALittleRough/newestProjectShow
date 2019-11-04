@@ -21,18 +21,26 @@
       <img width="100%" :src="dialogImageUrl" alt="">
     </el-dialog>
     <base-button type="success" class="upload-button" @click="submitUpload">点击上传</base-button>
+    <base-button type="primary" class="upload-button" @click="goback">返回</base-button>
+
+    <image-detail v-for="(info,index) in imageInfo" :key="index" :tableData="info"></image-detail>
   </div>
   
 </template>
 <script>
 import axios from 'axios'
+import ImageDetail from '../components/imageDetail'
 export default {
+  components: {
+    ImageDetail
+  },
   data() {
     return {
       dialogImageUrl: '',
       dialogVisible: false,
       fileList: [],
-      params: {}
+      params: {},
+      imageInfo: []
     };
   },
   created: function() {
@@ -59,7 +67,39 @@ export default {
       formData.append('mail', info.mail)
       console.log(formData)
       axios.post('http://localhost:3000/users/multiUpload', formData, headerConfig).then(res => {
-        console.log(res)
+        const data = res.data.data
+        if(data.upload) {
+          this.$message({
+            type: 'success',
+            message: '上传成功'
+          })
+          console.log(data)
+          data.imageInfos.forEach(imageInfo => {
+            this.imageInfo.push([
+              {
+                name: '图像ID',
+                value: imageInfo._id
+              },{
+                name: '图像名称',
+                value: imageInfo.title
+              }, {
+                name: 'ipfs哈希值',
+                value: imageInfo.ipfs_hash
+              }, {
+                name: '拥有者',
+                value: imageInfo.owner
+              }, {
+                name: '区块链Transaction ID',
+                value: imageInfo.otherInfo.id
+              }, {
+                name: '交易类型',
+                value: imageInfo.otherInfo.operation
+              }
+            ])
+          })
+        } else {
+          this.$message.error('上传文件失败！')
+        }
         return this.$store.dispatch('user/getInfo')
       })
       .then(data => {
@@ -71,6 +111,9 @@ export default {
     },
     beforeUpload(file) {
       this.fileList.push(file)
+    },
+    goback() {
+      this.$router.go(-1)
     }
   }
 }

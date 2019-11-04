@@ -9,7 +9,7 @@ const logger = new Logger();
 const crypto = require('crypto')
 const config = require('../config/config').config
 const ipfsAPI = require('ipfs-api')
-const ipfs = ipfsAPI({host: config.ipfs_api, port: '5001', protocol: 'http'});
+const ipfs = ipfsAPI({host: 'localhost', port: '5001', protocol: 'http'});
 const fs = require('fs')
 const driver = require('bigchaindb-driver')
 const conn = new driver.Connection(config.api_path)
@@ -299,7 +299,7 @@ async function multiUpload(req, res, next) {
         code: 20000,
         data: {
           upload: true,
-          imageInfos: infoArr
+          imageInfos: arr
         }
       })
     } else {
@@ -321,6 +321,11 @@ async function multiUpload(req, res, next) {
   }
 }
 
+/**
+ * inner function to update 
+ * @param {array} files upload image files
+ * @param {string} mail email of user
+ */
 function multiUploadInner(files, mail) {
   return new Promise((resolve, reject) => {
     const arr = []
@@ -356,7 +361,6 @@ function multiUploadInner(files, mail) {
         )
         let txCreateSimpleSigned = driver.Transaction.signTransaction(txCreateSimple, privateKey)
         let otherInfo = await conn.postTransactionCommit(txCreateSimpleSigned)
-        infoArr.push(otherInfo)
         let img = new Image({
           url: imgUrl,
           title: file.originalname,
@@ -364,6 +368,7 @@ function multiUploadInner(files, mail) {
           ipfs_hash: hash,
           otherInfo: otherInfo
         })
+        infoArr.push(otherInfo)
         let result = await img.save()
         arr.push(img)
         flag += 1
