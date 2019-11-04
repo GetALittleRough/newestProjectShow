@@ -160,3 +160,35 @@
 { level: 'warn',
   message: 'error in multiUploadReferenceError: mail is not defined',
   timestamp: '2019-11-03T16:56:02.764Z' }
+{ level: 'warn',
+  message:
+   'error in multiUploadError: connect ECONNREFUSED 127.0.0.1:5001',
+  timestamp: '2019-11-04T01:25:24.489Z' }
+{ level: 'warn',
+  message:
+   'error in multiUploadError: connect ECONNREFUSED 127.0.0.1:5001',
+  timestamp: '2019-11-04T01:25:24.493Z' }
+{ level: 'warn',
+  message:
+   'error in multiUploadError: connect ECONNREFUSED 127.0.0.1:5001',
+  timestamp: '2019-11-04T01:25:24.494Z' }
+{ level: 'warn',
+  message:
+   'error in multiUploadError: connect ECONNREFUSED 10.108.84.79:5001',
+  timestamp: '2019-11-04T01:30:40.950Z' }
+{ level: 'warn',
+  message:
+   'error in multiUploadError: connect ECONNREFUSED 10.108.84.79:5001',
+  timestamp: '2019-11-04T01:30:40.954Z' }
+{ level: 'warn',
+  message:
+   'error in multiUploadError: connect ECONNREFUSED 10.108.84.79:5001',
+  timestamp: '2019-11-04T01:30:40.958Z' }
+{ level: 'warn',
+  message:
+   'error in multiUploadError: connect ECONNREFUSED 10.108.84.79:5001',
+  timestamp: '2019-11-04T01:30:40.959Z' }
+{ level: 'warn',
+  message:
+   'error in multiUploadError: connect ECONNREFUSED 10.108.84.79:5001',
+  timestamp: '2019-11-04T01:30:40.972Z' }
