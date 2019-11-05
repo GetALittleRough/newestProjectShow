@@ -9,8 +9,9 @@ const Article = new Schema({
   brief: String,
   content: String,
   date: Date,
-  images: [String],
-  cover: String
-})
+  cover: String,
+  to: String,
+  author: String
+}, {collection: 'article'})
 
 module.exports = mongoose.model('Article', Article)

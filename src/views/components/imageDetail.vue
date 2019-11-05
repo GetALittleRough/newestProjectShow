@@ -7,19 +7,19 @@
 		<el-table-column
       prop="name"
       label="字段"
-      width="100%">
+      >
     </el-table-column>
 		<el-table-column
       prop="value"
       label="值"
-      width="100%">
+      >
     </el-table-column>
 	</el-table>
 </template>
 <script>
 export default {
 	props: {
-		tableData: Object
+		tableData: Array
 	}
 }
 </script>

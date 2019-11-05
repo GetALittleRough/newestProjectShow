@@ -4,6 +4,7 @@
  */
 const User = require('../models/user')
 const Image = require('../models/image')
+const Article = require('../models/article')
 const Logger = require('../utils/logger')
 const logger = new Logger();
 const crypto = require('crypto')
@@ -292,6 +293,7 @@ async function multiUpload(req, res, next) {
     const user = await User.findOne({'mail': mail})
     arr.forEach(img => {
       user.allimages.push(img)
+      user.workCount += 1
     })
     const result = await user.save()
     if(result) {
@@ -383,6 +385,48 @@ function multiUploadInner(files, mail) {
     })
   })
 }
+
+async function uploadArticle(req, res, next) {
+  const {title, brief, content, to, cover, date, author} = req.body
+  const article = new Article({
+    title: title,
+    brief: brief,
+    content: content,
+    to: to,
+    cover: cover,
+    date: date,
+    author: author
+  })
+  try {
+    const user = await User.findOne({mail: to})
+    user.articles.push(article)
+    const result = await article.save()
+    const userResult = await user.save()
+    if(result && userResult) {
+      res.send({
+        code: 20000,
+        data: {
+          upload: true
+        }
+      })
+    } else {
+      res.send({
+        code: 20000,
+        data: {
+          upload: false
+        }
+      })
+    }
+  } catch (err) {
+    logger.warnLog('error while uploading articles to server: ' + err)
+    res.send({
+      code: 20000,
+      data: {
+        upload: false
+      }
+    })
+  }
+}
 module.exports = {
   login: login,
   getInfo: getInfo,
@@ -390,5 +434,6 @@ module.exports = {
   whetherRegister: whetherRegister,
   setInfo: setInfo,
   handleUpload: handleUpload,
-  multiUpload: multiUpload
+  multiUpload: multiUpload,
+  uploadArticle: uploadArticle
 }

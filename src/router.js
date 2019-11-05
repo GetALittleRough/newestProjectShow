@@ -7,6 +7,7 @@ import Landing from "./views/Landing.vue";
 import Login from "./views/Login.vue";
 import Register from "./views/Register.vue";
 import Profile from "./views/Profile.vue";
+import PublishArticle from './views/PublishArticle.vue';
 
 import profileHomepage from './views/components/profileHomepage.vue';
 import editProfile from './views/components/editProfile.vue'
@@ -57,6 +58,15 @@ export default new Router({
       }
     },
     {
+      path: "/editarticle",
+      name: "editarticle",
+      components: {
+        header: AppHeader,
+        default: PublishArticle,
+        footer: AppFooter
+      }
+    },
+    {
       path: "/profile",
       components: {
         header: AppHeader,
@@ -86,7 +96,7 @@ export default new Router({
           }
         },
         {
-          path: 'article',
+          path: 'article/:id',
           name: 'article',
           components: {
             default: Article

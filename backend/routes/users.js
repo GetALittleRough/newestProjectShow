@@ -31,4 +31,5 @@ router.post('/whetherRegister', controller.whetherRegister)
 router.post('/setInfo', controller.setInfo)
 router.post('/handleUpload', upload.single('avatar'), controller.handleUpload)
 router.post('/multiUpload', upload.array('files'), controller.multiUpload)
+router.post('/uploadArticle', controller.uploadArticle)
 module.exports = router;

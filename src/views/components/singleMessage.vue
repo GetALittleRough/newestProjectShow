@@ -5,7 +5,7 @@
         <img :src="imgurl" alt="" class="thumbnail">
       </div>
       <div class="message-content col-md-9">
-        <a @click="goto(url)" href="#"><h4>{{ title }}</h4></a>
+        <a @click="goto(id)" href="#"><h4>{{ title }}</h4></a>
         <p class="brief-introduction">{{ brief_intro }}</p>
         <div class="public-time">
           <span ><i class="ni ni-watch-time"></i></span>
@@ -22,11 +22,12 @@ export default {
     url: String,
     date: String,
     title: String,
-    brief_intro: String
+    brief_intro: String,
+    id: String
   },
   methods: {
     goto(url) {
-      this.$router.push({path: url})
+      this.$router.push({path: '/profile/article/' + this.id})
     }
   }
 }
