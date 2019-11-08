@@ -68,7 +68,7 @@ export default {
 				date: Date.now(),
 				author: info.nickname
 			}
-			axios.post('http://localhost:3000/users/uploadArticle', data)
+			axios.post('http://10.108.84.79:3000/users/uploadArticle', data)
 			.then(res => {
 				const data = res.data.data
 				if(data.upload) {
@@ -80,7 +80,7 @@ export default {
 				return this.$store.dispatch('user/getInfo')
 			})
 			.then(res => {
-				
+
 			})
 			.catch(err => {
 				this.$message.error('上传文章失败' + err)

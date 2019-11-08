@@ -66,7 +66,7 @@ export default {
       })
       formData.append('mail', info.mail)
       console.log(formData)
-      axios.post('http://localhost:3000/users/multiUpload', formData, headerConfig).then(res => {
+      axios.post('http://10.108.84.79:3000/users/multiUpload', formData, headerConfig).then(res => {
         const data = res.data.data
         if(data.upload) {
           this.$message({
