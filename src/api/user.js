@@ -46,3 +46,11 @@ export function setInformation(data) {
     data
   })
 }
+
+export function getImage(data) {
+  return request({
+    url: 'users/getImage',
+    method: 'post',
+    data
+  })
+}

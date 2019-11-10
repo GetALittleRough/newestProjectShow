@@ -32,4 +32,5 @@ router.post('/setInfo', controller.setInfo)
 router.post('/handleUpload', upload.single('avatar'), controller.handleUpload)
 router.post('/multiUpload', upload.array('files'), controller.multiUpload)
 router.post('/uploadArticle', controller.uploadArticle)
+router.post('/getImage', controller.getImage)
 module.exports = router;

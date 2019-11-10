@@ -485,5 +485,6 @@ module.exports = {
   setInfo: setInfo,
   handleUpload: handleUpload,
   multiUpload: multiUpload,
-  uploadArticle: uploadArticle
+  uploadArticle: uploadArticle,
+  getImage: getImage
 }

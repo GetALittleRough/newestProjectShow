@@ -20,6 +20,8 @@
 </template>
 <script>
 import Card from '../../components/Card'
+import User from '../../api/user'
+
 export default {
   components: {
     Card
@@ -30,7 +32,18 @@ export default {
     }
   },
   created: function() {
-    console.log(this.$route.params)
+    const info = JSON.parse(localStorage.getItem('user-info'))
+    const token = this.$store.getters.token
+    const id = this.$route.params.id
+    const mail = info.mail
+    const reqData = {
+      token: token,
+      mail: mail,
+      id: id
+    }
+    User.getImage(reqData).then(res => {
+      console.log(res)
+    })
   }
 }
 </script>
