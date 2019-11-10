@@ -14,6 +14,7 @@ import editProfile from './views/components/editProfile.vue'
 import MessagesComponent from './views/components/Messages.vue'
 import Article from './views/components/Article.vue'
 import UploadImage from './views/components/uploadImage.vue'
+import EditImage from './views/components/EditImage.vue'
 
 Vue.use(Router);
 
@@ -100,6 +101,13 @@ export default new Router({
           name: 'article',
           components: {
             default: Article
+          }
+        },
+        {
+          path: 'image/:id',
+          name: 'imageEditing',
+          components: {
+            default: EditImage
           }
         },
         {

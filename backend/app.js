@@ -7,10 +7,11 @@ const cors = require('cors');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+const config = require('./config/config').config
 
 var app = express();
 const mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost:27017/', {useNewUrlParser: true});
+mongoose.connect(`mongodb://${config.ipfs_api}:27017/`, {useNewUrlParser: true});
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');

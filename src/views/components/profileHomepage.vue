@@ -265,7 +265,7 @@ export default {
       console.log(id)
     },
     editImage: function(id) {
-      console.log(id)
+      this.$router.push({path: `/profile/image/${id}`})
     },
     uploadWork: function() {
       this.$router.push({path: '/profile/uploadImage'})
