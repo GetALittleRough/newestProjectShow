@@ -437,10 +437,9 @@ async function uploadArticle(req, res, next) {
 async function getImage(req, res, next) {
   const {token, mail, id} = req.body
   try {
-    const user = User.findOne({mail: mail})
-    console.log(user)
+    const user = await User.findOne({mail: mail})
     if(token === user.token) {
-      const image = Image.findById(id)
+      const image = await Image.findById(id)
       if(image) {
         res.send({
           code: 20000,
