@@ -20,7 +20,7 @@
 </template>
 <script>
 import Card from '../../components/Card'
-import User from '../../api/user'
+import { getImage } from '../../api/user'
 
 export default {
   components: {
@@ -41,7 +41,8 @@ export default {
       mail: mail,
       id: id
     }
-    User.getImage(reqData).then(res => {
+    console.log(reqData)
+    getImage(reqData).then(res => {
       console.log(res)
     })
   }
