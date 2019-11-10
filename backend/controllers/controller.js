@@ -386,6 +386,12 @@ function multiUploadInner(files, mail) {
   })
 }
 
+/**
+ * api for article uploading
+ * @param {Obj} req message details
+ * @param {Obj} res whether successfully upload
+ * @param {func} next middleware
+ */
 async function uploadArticle(req, res, next) {
   const {title, brief, content, to, cover, date, author} = req.body
   const article = new Article({
@@ -423,6 +429,50 @@ async function uploadArticle(req, res, next) {
       code: 20000,
       data: {
         upload: false
+      }
+    })
+  }
+}
+
+async function getImage(req, res, next) {
+  const {token, mail, id} = req.body
+  try {
+    const user = User.findOne({mail: mail})
+    if(token === user.mail) {
+      const image = Image.findById(id)
+      if(image) {
+        res.send({
+          code: 20000,
+          data: {
+            imageObj: image,
+            whetherImage: true
+          }
+        })
+      } else {
+        res.send({
+          code: 20000,
+          data: {
+            whetherImage: false,
+            message: '找不到该图片，请联系系统管理员'
+          }
+        })
+      }
+    } else {
+      res.send({
+        code: 20000,
+        data: {
+          whetherImage: false,
+          message: '请您重新登录，您的登录已经过期！'
+        }
+      })
+    }
+  } catch(err) {
+    logger.warnLog('error in getImage: ' + err)
+    res.send({
+      code: 20000,
+      data: {
+        whetherImage: false,
+        message: '在找图片时发生错误'
       }
     })
   }
