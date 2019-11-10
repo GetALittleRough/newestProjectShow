@@ -438,6 +438,7 @@ async function getImage(req, res, next) {
   const {token, mail, id} = req.body
   try {
     const user = User.findOne({mail: mail})
+    console.log(user)
     if(token === user.token) {
       const image = Image.findById(id)
       if(image) {

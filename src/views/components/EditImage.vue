@@ -43,7 +43,11 @@ export default {
     }
     console.log(reqData)
     getImage(reqData).then(res => {
-      console.log(res)
+      if(!res.data.whetherImage) {
+        this.$message.error(res.data.message)
+      } else {
+        console.log('fd')
+      }
     })
   }
 }
