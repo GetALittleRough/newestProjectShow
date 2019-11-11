@@ -144,6 +144,17 @@
             
           </div>
       </div>
+      <el-dialog
+        title="查看图片"
+        :visible.sync="dialogVisible"
+        width="90%"
+        >
+        <span><img :src="imageUrl" alt="" style="width: 100%;"></span>
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="dialogVisible = false">取 消</el-button>
+          <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+        </span>
+      </el-dialog>
   </section>
 </template>
 <script>
@@ -153,6 +164,7 @@ import { FadeTransition } from "vue2-transitions";
 import { BasePagination } from '../../components/BasePagination';
 import Card from '../../components/Card'
 import tinyMice from '../components/tinymise'
+import { getImage } from '../../api/user'
 export default {
   components: {
     Tabs,
@@ -221,7 +233,9 @@ export default {
       monitorimages: [],
       registerimages: [],
       currentPage2: 1,
-      currentPage3: 1
+      currentPage3: 1,
+      dialogVisible: false,
+      imageUrl: ''
     }
   },
   methods: {
@@ -262,7 +276,18 @@ export default {
       this.images = info.monitorimages
     },
     checkImage: function(id) {
-      console.log(id)
+      const info = JSON.parse(localStorage.getItem('user-info'))
+      const token = this.$store.getters.token
+      const mail = info.mail
+      const reqData = {
+        token: token,
+        mail: mail,
+        id: id
+      }
+      getImage(reqData).then(res => {
+        this.imageUrl = res.data.imageObj.url
+        this.dialogVisible = true
+      })
     },
     editImage: function(id) {
       this.$router.push({path: `/profile/image/${id}`})
