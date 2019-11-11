@@ -54,3 +54,11 @@ export function getImage(data) {
     data
   })
 }
+
+export function uploadAvatar(data) {
+  return request({
+    url: 'users/handleUpload',
+    method: 'post',
+    data
+  })
+}

@@ -15,6 +15,7 @@ import MessagesComponent from './views/components/Messages.vue'
 import Article from './views/components/Article.vue'
 import UploadImage from './views/components/uploadImage.vue'
 import EditImage from './views/components/EditImage.vue'
+import AssetTransfer from './views/components/AssetTransfer.vue'
 
 Vue.use(Router);
 
@@ -115,6 +116,13 @@ export default new Router({
           name: 'uploadImage',
           components: {
             default: UploadImage
+          }
+        },
+        {
+          path: 'assetTransfer',
+          name: 'assetTransfer',
+          components: {
+            default: AssetTransfer
           }
         }
       ]

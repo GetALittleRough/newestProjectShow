@@ -151,8 +151,8 @@
         >
         <span><img :src="imageUrl" alt="" style="width: 100%;"></span>
         <span slot="footer" class="dialog-footer">
-          <el-button @click="dialogVisible = false">取 消</el-button>
-          <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+          <base-button type="secondary" @click="dialogVisible = false">取 消</base-button>
+          <base-button type="primary" @click="dialogVisible = false">确 定</base-button>
         </span>
       </el-dialog>
   </section>
@@ -191,7 +191,6 @@ export default {
     this.right = this.images.length > this.perPage? this.perPage: this.images.length;
     this.right2 = this.registerimages.length > this.perPage? this.perPage: this.registerimages.length;
     this.right3 = this.monitorimages.length > this.perPage? this.perPage: this.monitorimages.length;
-    
   },
 
   data() {

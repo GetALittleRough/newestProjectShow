@@ -110,12 +110,11 @@
     <modal :show.sync="saveStatus">
                 <h6 slot="header" class="modal-title" id="modal-title-default">提醒</h6>
 
-                登录成功
+                保存成功
 
                 <template slot="footer">
-                    <base-button type="primary" @click="goback">确定</base-button>
-                    <base-button type="link" class="ml-auto" @click="saveStatus=false">关闭
-                    </base-button>
+                  <base-button type="primary" @click="goback">确定</base-button>
+                  <base-button type="secondary" class="ml-auto" @click="saveStatus=false">关闭</base-button>
                 </template>
             </modal>
     <modal :show.sync="saveFailure"

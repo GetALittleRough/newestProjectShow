@@ -41,7 +41,7 @@
 </style>
 
 <script>
-import axios from 'axios'
+import { uploadAvatar } from '../api/user'
   export default {
     created: function() {
       const info = JSON.parse(localStorage.getItem('user-info'))
@@ -81,15 +81,13 @@ import axios from 'axios'
         }
         formData.append('avatar', file.raw)
         formData.append('mail', this.mail)
-        axios.post('http://localhost:3000/users/handleUpload', formData, headerConfig).then(res => {
+        uploadAvatar(formData)
+        .then(res => {
           this.imageUrl = URL.createObjectURL(file.raw);
           return this.$store.dispatch('user/getInfo')
         })
-        .then(data => {
-          
-        })
         .catch(err => {
-          console.log(err)
+          this.$message.error('上传用户头像失败！')
         })
       }
     }
