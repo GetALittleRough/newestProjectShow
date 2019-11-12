@@ -62,3 +62,11 @@ export function uploadAvatar(data) {
     data
   })
 }
+
+export function transferImage(data) {
+  return request({
+    url: 'users/transferImage',
+    method: 'post',
+    data
+  })
+}
