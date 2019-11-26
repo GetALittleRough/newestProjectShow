@@ -26,6 +26,7 @@ export default {
   created: function() {
     const info = JSON.parse(localStorage.getItem('user-info'))
     this.articles = info.articles
+    console.log(info.articles)
   },
   data() {
     return {

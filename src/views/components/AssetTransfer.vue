@@ -66,7 +66,7 @@
                     :identifyCode="identifyCode"></base-identify>
                 
                 <div class="text-center">
-                    <base-button type="primary" class="my-4" @click.native.prevent="handleLogin">确认</base-button>
+                    <base-button type="primary" class="my-4" @click.native.prevent="handleTransfer">确认</base-button>
                 </div>
               </form>
             </template>
@@ -137,6 +137,9 @@ export default {
       if(!value) {
         this.$message.error('输入信息不能为空')
       }
+    },
+    handleTransfer: function() {
+      
     }
   },
   watch: {

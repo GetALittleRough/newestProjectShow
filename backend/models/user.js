@@ -23,9 +23,9 @@ const User = new Schema({
   jobTitle: String,
   workplace: String,
   self_introduction: String,
-  allimages: [Image],
-  registerimages: [Image],
-  monitorimages: [Image],
+  allimages: [{type: Schema.Types.ObjectId, ref: 'Image'}],
+  registerimages: [{type: Schema.Types.ObjectId, ref: 'Image'}],
+  monitorimages: [{type: Schema.Types.ObjectId, ref: 'Image'}],
   notification: Number,
   registerDate: Date,
   publicKey: {
@@ -38,7 +38,7 @@ const User = new Schema({
     unique: true,
     type: String
   },
-  articles: [Article]
+  articles: [{type: Schema.Types.ObjectId, ref: 'Article'}]
 }, {collection: 'hypercool_users'})
 
 module.exports = mongoose.model('User', User)

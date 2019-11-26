@@ -41,7 +41,7 @@
                     </h3>
                     <div class="h6 font-weight-300"><i class="ni location_pin mr-2"></i>{{ residence }}</div>
                     <div class="h6 mt-4"><i class="ni business_briefcase-24 mr-2"></i>{{ jobTitle }}</div>
-                    <div><i class="ni education_hat mr-2"></i>{{ workplace }}</div>
+                    <!-- <div><i class="ni education_hat mr-2"></i>{{ workplace }}</div> -->
                   </div>
                   <div class="mt-5 py-5 border-top text-center">
                       <div class="row justify-content-center">
@@ -89,15 +89,15 @@
                 <div class="row">
                   <card shadow class="collections col-6" v-for="(img,index) in pages2" v-bind:key="index">
                     <template v-slot:header>
-                      作品n号
+                      {{img.title}}
                     </template>
                     <div >
                       <img v-bind:src="img.url" alt="index" class="collection-image">
                     </div>
                     <template v-slot:footer>
                       <div class="row justify-content-center">
-                        <base-button type="success" @click="save()">查看</base-button>
-                        <base-button type="primary" @click="goback()">编辑</base-button>
+                        <base-button type="success" @click="checkImage(img._id)">查看</base-button>
+                        <base-button type="primary" @click="editImage(img._id)">编辑</base-button>
                       </div>
                     </template>
                   </card>
@@ -116,15 +116,15 @@
                   <div class="row">
                     <card shadow class="collections col-6" v-for="(img,index) in pages3" v-bind:key="index">
                       <template v-slot:header>
-                        作品n号
+                        {{img.title}}
                       </template>
                       <div >
                         <img v-bind:src="img.url" alt="index" class="collection-image">
                       </div>
                       <template v-slot:footer>
                         <div class="row justify-content-center">
-                          <base-button type="success" @click="save()">查看</base-button>
-                          <base-button type="primary" @click="goback()">编辑</base-button>
+                          <base-button type="success" @click="checkImage(img._id)">查看</base-button>
+                          <base-button type="primary" @click="editImage(img._id)">编辑</base-button>
                         </div>
                       </template>
                     </card>
@@ -147,14 +147,27 @@
       <el-dialog
         title="查看图片"
         :visible.sync="dialogVisible"
-        width="90%"
+        width="70%"
         >
-        <span><img :src="imageUrl" alt="" style="width: 100%;"></span>
+        <span><img :src="imageUrl" alt="" class="box-image"></span>
         <span slot="footer" class="dialog-footer">
           <base-button type="secondary" @click="dialogVisible = false">取 消</base-button>
           <base-button type="primary" @click="dialogVisible = false">确 定</base-button>
         </span>
       </el-dialog>
+      <!-- <modal 
+        :show.sync="dialogVisible"
+        
+        modal-classes="modal-dialog-centered check-image">
+          <h6 slot="header" class="modal-title" id="modal-title-default">查看图片</h6>
+
+          <span><img :src="imageUrl" alt="" class="box-image"></span>
+
+          <template slot="footer">
+            <base-button type="secondary" @click="dialogVisible = false">取 消</base-button>
+            <base-button type="primary" @click="dialogVisible = false">确 定</base-button>
+          </template>
+      </modal> !-->
   </section>
 </template>
 <script>
@@ -165,17 +178,20 @@ import { BasePagination } from '../../components/BasePagination';
 import Card from '../../components/Card'
 import tinyMice from '../components/tinymise'
 import { getImage } from '../../api/user'
+import Modal from '../../components/Modal'
 export default {
   components: {
     Tabs,
     TabPane,
     FadeTransition,
     Card,
-    tinyMice
+    tinyMice,
+    Modal
   },
   created: function() {
     const info = JSON.parse(localStorage.getItem('user-info'))
     this.workCount = info.workCount
+    this.notification = info.notification
     this.registerCount = info.registerCount
     this.monitorCount = info.monitorCount
     this.name = info.nickname
@@ -317,8 +333,10 @@ export default {
 </script>
 <style scoped lang="scss">
 .collection-image {
-    width: 100%;
-    margin-top: 5vh;
+    max-width: 100%;
+    width: auto;
+    margin-top: 2vh;
+    max-height: 400px;
 }
 .pagination-nav {
   margin-top: 5vh;
@@ -329,5 +347,11 @@ export default {
 }
 .upload-button {
   margin-bottom: 3vh;
+}
+.box-image {
+  width: 100%;
+}
+.modal-dialog {
+  max-width: 70%;
 }
 </style>

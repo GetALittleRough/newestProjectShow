@@ -9,7 +9,7 @@
                 <a slot="title" href="/" class="nav-link" role="button">
                     <span class="nav-link-inner--text">主页</span>
                 </a>
-                <a href="/landing" class="nav-link" role="button"><li class="nav-item">版权存证</li></a>
+                <a href="/landing" class="nav-link" role="button"><li class="nav-item">版权市场</li></a>
                 <a href="/profile" class="nav-link" role="button"><li class="nav-item">登记版权</li></a>
                 <a href="/profile" class="nav-link" role="button"><li class="nav-item">版权监测</li></a>
                 

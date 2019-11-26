@@ -15,6 +15,11 @@ const fs = require('fs')
 const driver = require('bigchaindb-driver')
 const conn = new driver.Connection(config.api_path)
 
+const imghash = require('imghash')
+const leven = require('leven')
+const Promise = require('bluebird')
+const unlinkFile = Promise.promisify(fs.unlinkSync)
+const assert = require('assert')
 /**
  * handle login
  * @param {Obj} req username and password of user, now plain text
@@ -95,6 +100,9 @@ async function getInfo(req, res, next) {
   const { token } = req.query
   try {
     const info = await User.findOne({token: token})
+                                    .populate('monitorimages')
+                                    .populate('allimages')
+                                    .populate('articles')
     if(info) {
       res.send({
         code: 20000,
@@ -130,14 +138,15 @@ async function getInfo(req, res, next) {
 async function register(req, res, next) {
   const {username, mail, password} = req.body
   const d = crypto.createHash('md5').update(username + password + new Date().toISOString())
+  const keys = new driver.Ed25519Keypair()
   const token = d.digest('hex')
   const user = new User({
-    username: username,
+    username: mail,
     mail: mail,
     password: password,
     token: token,
     avatar: `${config.serverUrl}/images/user.svg`,
-    nickname: '未定义',
+    nickname: username,
     workCount: 0,
     registerCount: 0,
     monitorCount: 0,
@@ -149,7 +158,9 @@ async function register(req, res, next) {
     allimages:[],
     registerimages: [],
     monitorimages: [],
-    notification: 0
+    notification: 0,
+    publicKey: keys.publicKey,
+    privateKey: keys.privateKey
   })
   user.save(err => {
     if(err) {
@@ -290,13 +301,10 @@ async function multiUpload(req, res, next) {
   
   try {
     const {arr, infoArr} = await multiUploadInner(req.files, mail)
-    const user = await User.findOne({'mail': mail})
-    arr.forEach(img => {
-      user.allimages.push(img)
-      user.workCount += 1
-    })
-    const result = await user.save()
-    if(result) {
+    // const user = await User.findOne({'mail': mail})
+    const saveResult = await saveImageArr(arr, mail)
+    // const result = await user.save()
+    if(saveResult) {
       res.send({
         code: 20000,
         data: {
@@ -312,17 +320,60 @@ async function multiUpload(req, res, next) {
         }
       })
     }
+    
   } catch(err) {
     logger.warnLog('error in multiUpload' + err)
-    res.send({
-      code: 20000,
-      data: {
-        upload: false
-      }
-    })
+    switch(err.type) {
+      case 100:
+        const percent = err.similarity * 100
+        res.send({
+          code: 20000,
+          data: {
+            upload: false,
+            similarity: err.similarity,
+            message: '经系统监测您上传的图片相似度达到了：' + percent + '%，上传失败'
+          }
+        })
+        break
+      case 101:
+        res.send({
+          code: 20000,
+          data: {
+            upload: false,
+            message: err.message
+          }
+        })
+        break
+    }
   }
 }
 
+/**
+ * inner function to save all images
+ * @param {array} arr all image files
+ * @param {String} mail is user id
+ */
+function saveImageArr(arr, mail) {
+  return new Promise((resolve, reject) => {
+    let flag = 0
+    arr.forEach(async img => {
+      try {
+        await User.updateOne(
+          {mail: mail},
+          {$push: {allimages: img._id},
+           $inc: {workCount: 1}}
+        )
+      } catch(err) {
+        logger.warnLog('error while saveImageArr: ' + err)
+        resolve(false)
+      }
+      flag++
+      if(flag === arr.length) {
+        resolve(true)
+      }
+    })
+  })
+}
 /**
  * inner function to update 
  * @param {array} files upload image files
@@ -363,12 +414,33 @@ function multiUploadInner(files, mail) {
         )
         let txCreateSimpleSigned = driver.Transaction.signTransaction(txCreateSimple, privateKey)
         let otherInfo = await conn.postTransactionCommit(txCreateSimpleSigned)
+
+        // calculate phash
+        const phash = await imghash.hash(`${file.destination}/${file.filename}`)
+
+        // whether same image with other image
+        const images = await Image.find({})
+        for(let item in images) {
+          const simi = leven(images[item]['phash'], phash)
+          if(simi <= 10) {
+            unlinkFile(`${file.destination}/${file.filename}`)
+            let similarity = 1 - simi / 29
+            reject({
+              type: 100,
+              similarity: similarity,
+              message: 'the two images are similar'
+            })
+            break
+          }
+ 
+        }
         let img = new Image({
           url: imgUrl,
           title: file.originalname,
           owner: mail,
           ipfs_hash: hash,
-          otherInfo: otherInfo
+          otherInfo: otherInfo,
+          phash: phash
         })
         infoArr.push(otherInfo)
         let result = await img.save()
@@ -379,7 +451,11 @@ function multiUploadInner(files, mail) {
         }
       } catch(err) {  
         logger.warnLog('error in multiUpload' + err)
-        reject(err)
+        console.log(err)
+        reject({
+          type: 101,
+          message: err
+        })
       }
       
     })
@@ -477,6 +553,311 @@ async function getImage(req, res, next) {
     })
   }
 }
+
+async function transferAsset(req, res, next) {
+  const { publicKey, privateKey, transferTo, imageID } = req.body
+  try {
+    const image = await Image.findById(imageID)
+    const asset = await conn.getTransaction(image.otherInfo.id)
+    const transferToElse = driver.Transaction.makeTransferTransaction(
+      [{tx: asset, output_index: 0}],
+      [driver.Transaction.makeOutput(driver.Transaction.makeEd25519Condition(transferTo))],
+    )
+    let txCreateSimpleSigned = driver.Transaction.signTransaction(transferToElse, privateKey)
+    const transResult = await conn.postTransactionCommit(txCreateSimpleSigned)
+    
+    // update the image object
+    const updateImg = await Image.updateOne(
+      {_id: imageID},
+      {$set: {otherInfo: transResult}}
+    )
+    
+    // update the users
+    const updateSeller = await User.updateOne(
+      {publicKey: publicKey},
+      {$pull: {allimages: image._id}}
+    )
+
+    // update the receiver
+    const updateReceiver = await User.updateOne(
+      {publicKey: transferTo},
+      {$push: {allimages: imageID}}
+    )
+    
+    if(updateSeller && updateReceiver) {
+      res.send({
+        code: 20000,
+        data: {
+          transfer: true
+        }
+      })
+    } else {
+      res.send({
+        code: 20000,
+        data: {
+          transfer: false
+        }
+      })
+    }
+  } catch(err) {
+    logger.warnLog('error while transferring images to user: ' + err)
+    res.send({
+      code: 20000,
+      data: {
+        transfer: false
+      }
+    })
+  }
+}
+
+async function monitImage(req, res, next) {
+  const { mail, token, imageID } = req.body
+  try {
+    const user = await User.findOne({mail: mail, token: token})
+    const image = await Image.findById(imageID)
+    
+    if(user && image) {
+       // if both exist
+      const pushResult = await User.updateOne(
+        { mail: mail },
+        { $push: {monitorimages: image._id},
+          $inc: {monitorCount: 1}})
+      const monitResult = await Image.updateOne(
+        { _id: imageID },
+        {$set: {whetherMonitor: true}}
+      )
+      if(pushResult && monitResult) {
+        res.send({
+          code: 20000,
+          data: {
+            update: true
+          }
+        })
+      } else {
+        logger.warnLog(new Error('error while saving to database'))
+        res.send({
+          code: 20000,
+          data: {
+            update: false
+          }
+        })
+      }
+    } else {
+      logger.warnLog(new Error('error while pushing monitor images: user or image not adequite'))
+      res.send({
+        code: 20000,
+        data: {
+          update: false
+        }
+      })
+    }
+  } catch(err) {
+    logger.warnLog('error while monitor images: ' + err)
+    res.send({
+      code: 20000,
+      data: {
+        update: false
+      }
+    })
+  }
+}
+
+async function cancelMonit(req, res, next) {
+  const { mail, token, imageID } = req.body
+  const promises = Promise.all([
+    User.findOne({mail: mail, token: token}),
+    Image.findById(imageID),
+    User.updateOne(
+      {mail: mail},
+      {$pull: {monitorimages: imageID},
+       $inc: {monitorCount: -1}}
+    ),
+    Image.updateOne(
+      { _id: imageID },
+      {$set: {whetherMonitor: false}}
+    )
+  ])
+  let flag = true
+  promises.then(result => {
+    for(let i in result) {
+      if(result[i])
+        continue
+      else
+        flag = false
+    }
+    if(flag) {
+      res.send({
+        code: 20000,
+        data: {
+          cancel: true
+        }
+      })
+    } else {
+      logger.warnLog('document not found while cancelling image: ' + err)
+      res.send({
+        code: 20000,
+        data: {
+          cancel: false
+        }
+      })
+    }
+  })
+  .catch(err => {
+    logger.warnLog('error while cancelling image: ' + err)
+    res.send({
+      code: 20000,
+      data: {
+        cancel: false
+      }
+    })
+  })
+}
+
+async function getAllImages(req, res, next) {
+  try {
+    const result = await Image.find({}).select('url')
+    const resultArr = []
+    for(let i in result) {
+      resultArr.push({
+        url: result[i].url,
+        id: result[i]._id
+      })
+      if(i == result.length - 1) {
+        res.send({
+          code: 20000,
+          data: {
+            whetherGet: true,
+            images: resultArr
+          }
+        })
+      }
+    }
+  } catch(err) {
+    logger.warnLog('error while getting all images from database: ' + err)
+    res.send({
+      code: 20000,
+      data: {
+        whetherGet: false
+      }
+    })
+  }
+}
+
+async function checkImage(req, res, next) {
+  const { imageID } = req.body
+  try {
+    const user = await User.findOne(
+      {allimages: imageID}
+    )
+    if(user) {
+      res.send({
+        code: 20000,
+        data: {
+          username: user.username,
+          nickname: user.nickname,
+          publicKey: user.publicKey,
+          user: true
+        }
+      })
+    } else {
+      res.send({
+        code: 20000,
+        data: {
+          user: false,
+          message: '没有找到该图片用户'
+        }
+      })
+    }
+  } catch(err) {
+    logger.warnLog('error in checkImage: ' + err)
+    res.send({
+      code: 20000,
+      data: {
+        user: false,
+        message: '查找时发生错误'
+      }
+    })
+  }
+}
+
+/**
+ * intelligent backend filter sends image features through this api to judge whether there is a violation
+ * @param {Array} req array of phash
+ * @param {Boolean} res whether received successfully
+ * @param {func} next Middleware
+ */
+async function monitAcceptor(req, res, next) {
+  const {url, phash} = req.body
+  console.log(req.body)
+  console.log(typeof(phash))
+  let violate = null
+  try {
+    const images = await Image.find({whetherMonitor: true})
+    for(let i in images) {
+      for(let j in phash) {
+        let simi = leven(images[i].phash, phash[j])
+        if(simi <= 10) {
+          let similarity = 1 - simi / 29
+          violate = await Image.updateOne(
+            {_id: images[i]._id},
+            {$set: {violation: true},
+             $push: {violationResult: {url: url, similarity: similarity}}}
+          )
+          let violateArticle = `<div class="text-center col-md-12">
+                                <p>经过系统检测有一个图片和您的版权图片高度重合，被侵权图片为：</p>
+                                  <div class="col-md-12 text-center">
+                                    
+                                    <img src="${images[i].url}" alt="" style="max-width: 80%;">
+                                  </div>
+                                  <p>侵权网址为：<a href="${url}">${url}</a></p>
+                                  <p>请您及时维权</p>
+                              </div>`
+          let article = new Article({
+            title: '侵权提醒',
+            brief: '系统检测到了和您的相似图片',
+            content: violateArticle,
+            date: Date.now(),
+            cover: images[i].url,
+            to: images[i].owner,
+            author: 'system'
+          })
+          let articlesave = await article.save()
+          let updateres = await User.updateOne(
+            {mail: images[i].owner},
+            {$push: {articles: articlesave._id},
+             $inc: {notification: 1}}
+          )
+          console.log(updateres)
+        }
+      }
+      if(i == images.length - 1) {
+        if(violate) {
+          res.send({
+            code: 20000,
+            data: {
+              message: '发生了侵权行为'
+            }
+          })
+        } else {
+          res.send({
+            code: 20000,
+            data: {
+              message: '无侵权行为'
+            }
+          })
+        }
+      }
+    }
+  } catch(err) {
+    logger.warnLog('error in monitorAcceptor: ' + err)
+    res.send({
+      code: 20000,
+      data: {
+        message: '服务器查找发生错误'
+      }
+    })
+  }
+}
 module.exports = {
   login: login,
   getInfo: getInfo,
@@ -486,5 +867,11 @@ module.exports = {
   handleUpload: handleUpload,
   multiUpload: multiUpload,
   uploadArticle: uploadArticle,
-  getImage: getImage
+  getImage: getImage,
+  monitImage: monitImage,
+  cancelMonit: cancelMonit,
+  transferAsset: transferAsset,
+  getAllImages: getAllImages,
+  checkImage: checkImage,
+  monitAcceptor: monitAcceptor
 }

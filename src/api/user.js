@@ -70,3 +70,42 @@ export function transferImage(data) {
     data
   })
 }
+
+export function monitImage(data) {
+  return request({
+    url: 'users/monitImage',
+    method: 'post',
+    data
+  })
+}
+
+export function calcelMonit(data) {
+  return request({
+    url: 'users/cancelMonit',
+    method: 'post',
+    data
+  })
+}
+
+export function transferAsset(data) {
+  return request({
+    url: 'users/transferAsset',
+    method: 'post',
+    data
+  })
+}
+
+export function requestWithName(name, method, data) {
+  return request({
+    url: name,
+    method: method,
+    data
+  })
+}
+
+export function getAllImages() {
+  return request({
+    url: 'users/getAllImages',
+    method: 'get'
+  })
+}

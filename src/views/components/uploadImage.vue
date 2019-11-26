@@ -3,7 +3,7 @@
     <h3 class="display-3 text-white">请在此界面上传您的作品</h3>
     <el-upload
       :before-upload="beforeUpload"
-      action=""
+      action="#"
       ref="uploadForm"
       :auto-upload="false"
       list-type="picture-card"
@@ -65,9 +65,10 @@ export default {
         formData.append('files', file)
       })
       formData.append('mail', info.mail)
-      console.log(formData)
+      
       axios.post('http://10.108.84.79:3000/users/multiUpload', formData, headerConfig).then(res => {
         const data = res.data.data
+        console.log(res)
         if(data.upload) {
           this.$message({
             type: 'success',
@@ -97,13 +98,18 @@ export default {
               }
             ])
           })
+          return this.$store.dispatch('user/getInfo')
         } else {
-          this.$message.error('上传文件失败！')
+          if(typeof(data['message']) !== 'undefined') {
+            this.$message.error(data['message'])
+          } else {
+             this.$message.error('上传文件失败')
+          }
         }
-        return this.$store.dispatch('user/getInfo')
+        
       })
       .then(data => {
-        
+
       })
       .catch(err => {
         console.log(err)
